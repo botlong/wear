@@ -1,0 +1,123 @@
+[
+ {
+  "id": "airline_append_denver_amelia_2925",
+  "_doc": "APPEND×identity (fresh;): referent 9TLOJT (trip to Denver), decoy ZZ9101 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9101' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: fresh resolution. Gold unchanged (9TLOJT).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9101"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to list all the trips on your account (destination cities and dates). SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to your trip to Denver.",
+    "known_info": "You are Amelia Moore, user id amelia_moore_2925, date of birth 1999-11-16. Your one and only trip to Denver departs from Boston on 2024-05-18.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9101": {
+       "reservation_id": "ZZ9101",
+       "user_id": "amelia_moore_2925",
+       "origin": "BOS",
+       "destination": "DEN",
+       "flight_type": "one_way",
+       "cabin": "business",
+       "flights": [
+        {
+         "origin": "BOS",
+         "destination": "MIA",
+         "flight_number": "HAT086",
+         "date": "2024-05-21",
+         "price": 850
+        },
+        {
+         "origin": "MIA",
+         "destination": "DEN",
+         "flight_number": "HAT148",
+         "date": "2024-05-21",
+         "price": 1304
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Amelia",
+         "last_name": "Moore",
+         "dob": "1999-11-16"
+        },
+        {
+         "first_name": "Harper",
+         "last_name": "Muller",
+         "dob": "1951-11-21"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "credit_card_9414946",
+         "amount": 4308
+        }
+       ],
+       "created_at": "2024-05-12T23:40:41",
+       "total_baggages": 4,
+       "nonfree_baggages": 0,
+       "insurance": "no"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "amelia_moore_2925"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "9TLOJT"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "9TLOJT",
+      "total_baggages": 5,
+      "nonfree_baggages": 0,
+      "payment_id": "credit_card_3664152"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

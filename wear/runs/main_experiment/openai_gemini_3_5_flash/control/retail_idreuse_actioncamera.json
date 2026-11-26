@@ -1,0 +1,2033 @@
+{
+ "tasks": [
+  {
+   "id": "retail_idreuse_actioncamera_control",
+   "description": {
+    "purpose": "Measure wrong-entity binding under id-reuse for content deixis.",
+    "relevant_policies": null,
+    "notes": null
+   },
+   "user_scenario": {
+    "persona": null,
+    "instructions": {
+     "domain": "retail",
+     "reason_for_call": "You want to do two things in order. FIRST, ask the agent to tell you which items are in your order that contains the action camera. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip.",
+     "known_info": "You are Amelia Patel. For identity verification, your account email is amelia.patel6926@example.com. Your NEW shipping address (what you want to change the order to) is 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "unknown_info": null,
+     "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request."
+    }
+   },
+   "ticket": null,
+   "initial_state": null,
+   "evaluation_criteria": {
+    "actions": [
+     {
+      "action_id": "a0",
+      "requestor": "assistant",
+      "name": "find_user_id_by_email",
+      "arguments": {
+       "email": "amelia.patel6926@example.com"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r0",
+      "requestor": "assistant",
+      "name": "get_user_details",
+      "arguments": {
+       "user_id": "amelia_patel_7834"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r1",
+      "requestor": "assistant",
+      "name": "get_order_details",
+      "arguments": {
+       "order_id": "#W2079779"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "w0",
+      "requestor": "assistant",
+      "name": "modify_pending_order_address",
+      "arguments": {
+       "order_id": "#W0000010",
+       "address1": "664 Copper Ridge Road",
+       "address2": "Apt 2C",
+       "city": "Reno",
+       "state": "NV",
+       "country": "USA",
+       "zip": "89509"
+      },
+      "info": null,
+      "compare_args": null
+     }
+    ],
+    "env_assertions": null,
+    "communicate_info": [],
+    "nl_assertions": null,
+    "reward_basis": [
+     "DB"
+    ]
+   },
+   "issues": null,
+   "required_documents": null,
+   "user_tools": null
+  }
+ ],
+ "simulations": [
+  {
+   "id": "3dfefc62-ffb7-4a01-974f-20ba76944039",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 24.88477061399999,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hello. Could you please tell me which items are in my order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To look up your order details, I first need to verify your account. Could you please provide the email address associated with your account, or your first and last name along with your zip code?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_27b3bf393d394ee9",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_27b3bf393d394ee9",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_84a50e188ac32df2",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_84a50e188ac32df2",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_494ce9f0433af760",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_494ce9f0433af760",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Your order `#W0000010` contains the action camera. The items in this order are:\n\n1. **Action Camera** (Item ID: 9168994198)\n   - Resolution: 1080p\n   - Waterproof: No\n   - Color: Black\n   - Price: $466.76\n\n2. **Sunglasses** (Item ID: 4358482460)\n   - Frame Color: Black\n   - Lens Color: Brown\n   - Lens Type: Polarized\n   - Frame Material: Plastic\n   - Price: $290.94",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thank you. Could you please change the shipping address for that order to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help you update the shipping address for order `#W0000010` to the following:\n\n* **Address Line 1:** 664 Copper Ridge Road\n* **Address Line 2:** Apt 2C\n* **City:** Reno\n* **State:** NV\n* **Zip Code:** 89509\n* **Country:** USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed with that change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_652a8e14e2821eaa",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_652a8e14e2821eaa",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for your order `#W0000010` has been successfully updated to:\n664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can assist you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "No, that's everything. Thank you!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 300,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "e7eeab22-cd4d-4cbf-b05f-82b7810634e5",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 29.624827905000075,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I was hoping you could tell me which items are in my order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To get started, could you please provide your email address? Alternatively, you can share your first and last name along with your zip code. This will help me locate your account and find your order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_5fc43bc1b724edb4",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_5fc43bc1b724edb4",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_4eda554834a6dc5a",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_4eda554834a6dc5a",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_11f0af5a61cddcfd",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_11f0af5a61cddcfd",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_f94d4ea5d7886b18",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W6497157"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_f94d4ea5d7886b18",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W6497157\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"items\": [{\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"9672174103\", \"price\": 281.98, \"options\": {\"frame color\": \"brown\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"2993891288\", \"price\": 383.08, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"AMOLED\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9320099340\", \"price\": 375.03, \"options\": {\"color\": \"black\", \"band material\": \"leather\", \"display\": \"AMOLED\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"157705128923\"], \"item_ids\": [\"9672174103\", \"2993891288\", \"9320099340\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1040.09, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_2f1ede62d49cc8d8",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2079779"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_2f1ede62d49cc8d8",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2079779\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"items\": [{\"name\": \"Tablet\", \"product_id\": \"8024098596\", \"item_id\": \"3788616824\", \"price\": 951.21, \"options\": {\"screen size\": \"10-inch\", \"storage\": \"128GB\", \"color\": \"black\"}}, {\"name\": \"Wireless Earbuds\", \"product_id\": \"9924732112\", \"item_id\": \"5565631513\", \"price\": 267.9, \"options\": {\"color\": \"black\", \"battery life\": \"6 hours\", \"water resistance\": \"IPX7\"}}, {\"name\": \"Bluetooth Speaker\", \"product_id\": \"4768869376\", \"item_id\": \"7617930199\", \"price\": 285.94, \"options\": {\"color\": \"red\", \"battery life\": \"20 hours\", \"water resistance\": \"yes\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 4299.75, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the action camera is order **#W0000010**. It contains the following items:\n\n1. **Action Camera** \n   - **Item ID:** 9168994198\n   - **Price:** $466.76\n   - **Options:** 1080p, waterproof: no, color: black\n\n2. **Sunglasses** \n   - **Item ID:** 4358482460\n   - **Price:** $290.94\n   - **Options:** frame color: black, lens color: brown, lens type: polarized, frame material: plastic\n\nIs there anything else I can help you with regarding this order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Could you change the shipping address for that order to my new address, please? It's 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help you update the shipping address for your pending order **#W0000010**. \n\nHere are the details of the update:\n* **Order ID:** #W0000010\n* **New Shipping Address:** \n  * 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_6a7c228e820fd416",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_6a7c228e820fd416",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can do for you?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "No, that's all. Thank you! ###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 301,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "271289ed-cc34-44d6-8ed7-feb9729f82ff",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 25.154987551999966,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I was hoping you could tell me which items are in my order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To get started, could you please provide your email address? Alternatively, you can share your first name, last name, and zip code so I can locate your account.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_a967e04eaa0d21e7",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_a967e04eaa0d21e7",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_5fe5d6ec2b660b72",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_5fe5d6ec2b660b72",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_c8a6d7c4f19cbe39",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_c8a6d7c4f19cbe39",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Your order #W0000010 contains the action camera. The items in this order are:\n\n1. **Action Camera** \n   - **Item ID:** 9168994198\n   - **Options:** 1080p resolution, not waterproof, color: black\n   - **Price:** $466.76\n\n2. **Sunglasses** \n   - **Item ID:** 4358482460\n   - **Options:** black frame, brown lenses, polarized, plastic frame material\n   - **Price:** $290.94",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thanks. Could you please change the shipping address for that order to my new address? It is 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can update the shipping address for your pending order #W0000010 to:\n\n- **Address 1:** 664 Copper Ridge Road\n- **Address 2:** Apt 2C\n- **City:** Reno\n- **State:** NV\n- **Zip Code:** 89509\n- **Country:** USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please go ahead with that.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_ff92d60b54f2bbf2",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_ff92d60b54f2bbf2",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA. \n\nIs there anything else I can assist you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "No, that is all. Thank you for your help!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 302,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "c2aa7e41-a719-4efc-840d-007fbebbd658",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 23.96166035899978,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hello! I would like to check which items are in my order that contains the action camera.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To assist you, could you please provide your email address? Alternatively, you can share your first name, last name, and zip code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_92eb6372be4f66de",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_92eb6372be4f66de",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_e1b5f63ffb103e82",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_e1b5f63ffb103e82",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_95e2c55def09adb3",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_95e2c55def09adb3",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The items in your order containing the action camera (Order ID: #W0000010) are:\n\n1. **Action Camera** \n   - **Item ID:** 9168994198\n   - **Price:** $466.76\n   - **Options:** Resolution: 1080p, Waterproof: No, Color: Black\n\n2. **Sunglasses** \n   - **Item ID:** 4358482460\n   - **Price:** $290.94\n   - **Options:** Frame Color: Black, Lens Color: Brown, Lens Type: Polarized, Frame Material: Plastic\n\nWould you like to make any modifications or changes to this order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please. I would like to change the shipping address for that order to my new address: 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can modify the shipping address for your pending order #W0000010. \n\nThe address will be changed from:\n* **Original Address:** 985 Pine Lane, Suite 927, Phoenix, AZ 85047, USA\n* **New Address:** 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_fca71b21b35774e7",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_fca71b21b35774e7",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to:\n\n664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can help you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 303,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "b77021cb-26fa-41af-8c7a-c14a327ee807",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 23.800720470000215,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi there! I was wondering if you could tell me which items are in the order I placed that has the action camera in it?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To help you with that, could you please provide your email address? Alternatively, you can share your first and last name along with your zip code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_48d3eb75a74219fb",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_48d3eb75a74219fb",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_4f5abe54b8589edd",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_4f5abe54b8589edd",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_362d9f28f9c6edf0",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_362d9f28f9c6edf0",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The items in the order that contains the action camera (Order #W0000010) are:\n\n1. **Action Camera** (Item ID: 9168994198) - 1080p, Black, Non-waterproof (Price: $466.76)\n2. **Sunglasses** (Item ID: 4358482460) - Black frame, Brown polarized lenses, Plastic (Price: $290.94)",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thank you. Could you please change the shipping address for that order to my new address? It is 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To update the shipping address for order **#W0000010**, please confirm if you would like me to change the shipping destination:\n\n* **From:** 985 Pine Lane, Suite 927, Phoenix, AZ 85047, USA\n* **To:** 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease reply with **yes** to confirm this change, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please make that change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_62929f656b80af2e",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_62929f656b80af2e",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to:\n664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can assist you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "That was everything I needed help with. Thank you!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 304,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "b07f4a02-a838-4ac0-9765-efa989aa600a",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 32.10355407099996,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi! I was hoping you could tell me which items are in the order that has the action camera in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I would be happy to help you with that! First, could you please provide your email address or your full name and zip code so I can look up your account?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_99ed49a02245558c",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_99ed49a02245558c",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_770a905a94e07f29",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_770a905a94e07f29",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_d0e7fdef86811f94",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_d0e7fdef86811f94",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the action camera is **#W0000010** (which is currently pending). Here are the items in that order:\n\n1. **Action Camera** \n   - Item ID: 9168994198\n   - Options: Resolution: 1080p, Waterproof: No, Color: Black\n   - Price: $466.76\n\n2. **Sunglasses**\n   - Item ID: 4358482460\n   - Options: Frame Color: Black, Lens Color: Brown, Lens Type: Polarized, Frame Material: Plastic\n   - Price: $290.94\n\nWould you like to do anything else with this order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, I would like to change the shipping address for that order to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can certainly help you change the shipping address for order **#W0000010**. \n\nHere are the details of the update:\n* **Order ID:** #W0000010\n* **New Shipping Address:** 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease confirm if you would like me to proceed with this modification by replying \"yes\" or \"no\".",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_303000a98c0b909e",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_303000a98c0b909e",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to:\n\n664 Copper Ridge Road, Apt 2C\nReno, NV 89509\nUSA\n\nIs there anything else I can assist you with today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "That is all I needed. Thank you so much for your help!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 305,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "ed02c1ad-076a-40e2-9612-09f30f1dc646",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 27.55862478400013,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I was hoping you could tell me which items are in the order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To help you with that, could you please provide your email address? Alternatively, you can share your first name, last name, and zip code so I can locate your account.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_461f6dc1bee0d370",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_461f6dc1bee0d370",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_d3d5ee8a5fad7aa1",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_d3d5ee8a5fad7aa1",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_1572643b4c2ae128",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_1572643b4c2ae128",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the action camera is **#W0000010**. \n\nIt contains the following items:\n1. **Action Camera** (resolution: 1080p, waterproof: no, color: black) - $466.76 (Item ID: 9168994198)\n2. **Sunglasses** (frame color: black, lens color: brown, lens type: polarized, frame material: plastic) - $290.94 (Item ID: 4358482460)",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thank you. Could you please change the shipping address for that order to my new address?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure, I can help you with that! Could you please provide the details of your new shipping address (including street address, apartment/suite number if applicable, city, state, country, and zip code)? Or if you would like to use the default address on your profile (923 Elm Street, Suite 362, Phoenix, AZ 85051), please let me know.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "It's 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can update the shipping address for your pending order **#W0000010** to the following address:\n\n* **Address line 1:** 664 Copper Ridge Road\n* **Address line 2:** Apt 2C\n* **City:** Reno\n* **State:** NV\n* **Zip:** 89509\n* **Country:** USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_cd6e4a11829c8b3b",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_cd6e4a11829c8b3b",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W0000010** has been successfully updated to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA. \n\nIs there anything else I can assist you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "No, that's all. Thank you for your help! ###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 306,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "80163a72-b963-497d-881a-2f220a348aab",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 27.71609964399977,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I was wondering if you could tell me which items are in the order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To check that for you, could you please provide your email address? Alternatively, you can provide your first name, last name, and zip code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_14b5012969ae4563",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_14b5012969ae4563",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_2e91d736d67ca8ce",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_2e91d736d67ca8ce",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_89142da6639fe90d",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_89142da6639fe90d",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_72f262dbae81a30d",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W6497157"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_72f262dbae81a30d",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W6497157\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"items\": [{\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"9672174103\", \"price\": 281.98, \"options\": {\"frame color\": \"brown\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"2993891288\", \"price\": 383.08, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"AMOLED\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9320099340\", \"price\": 375.03, \"options\": {\"color\": \"black\", \"band material\": \"leather\", \"display\": \"AMOLED\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"157705128923\"], \"item_ids\": [\"9672174103\", \"2993891288\", \"9320099340\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1040.09, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Order #W0000010 contains the Action Camera. The items in this order are:\n\n1. **Action Camera** (1080p resolution, non-waterproof, black color)\n2. **Sunglasses** (black frame, brown polarized lenses, plastic frame material)",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thank you. Could you please change the shipping address for that order to 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To update the shipping address for your pending order #W0000010, the new address details will be:\n\n* **Address Line 1:** 664 Copper Ridge Road\n* **Address Line 2:** Apt 2C\n* **City:** Reno\n* **State:** NV\n* **Zip Code:** 89509\n* **Country:** USA\n\nPlease confirm if you would like me to proceed with this change (yes/no).",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, that's correct. Please proceed with that change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_a07430ebafd270f5",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_a07430ebafd270f5",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order #W0000010 has been successfully updated to:\n\n664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can assist you with today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "No, that's all I needed. Thank you for your help!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 307,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "394d391c-12d0-4d49-947e-ecf39ae4c307",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 24.038071080999543,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi there! I was hoping you could tell me which items are in the order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Before we begin, I need to authenticate your identity. Could you please provide your email address, or your first name, last name, and zip code?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_b2f811c8d19a7664",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_b2f811c8d19a7664",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_e2a94e56d1398fb9",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_e2a94e56d1398fb9",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_63d021a3cca9b367",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_63d021a3cca9b367",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the action camera is **#W0000010**. It contains the following items:\n\n1. **Action Camera** \n   - **Resolution:** 1080p\n   - **Waterproof:** No\n   - **Color:** Black\n   - **Price:** $466.76\n\n2. **Sunglasses**\n   - **Frame Color:** Black\n   - **Lens Color:** Brown\n   - **Lens Type:** Polarized\n   - **Frame Material:** Plastic\n   - **Price:** $290.94",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks for checking. Could you please change the shipping address for that order to my new address? It is 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can certainly help you change the shipping address for order **#W0000010**. \n\nHere are the details of the modification:\n- **Order ID:** #W0000010\n- **Current Address:** 985 Pine Lane, Suite 927, Phoenix, AZ 85047, USA\n- **New Address:** 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease confirm with a \"yes\" or \"no\" if you would like me to proceed with this change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed with that change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_65564591ce0d461d",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_65564591ce0d461d",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for your order **#W0000010** has been successfully updated to:\n\n664 Copper Ridge Road, Apt 2C\nReno, NV 89509\nUSA\n\nIs there anything else I can assist you with?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 308,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  },
+  {
+   "id": "f3234a1a-3628-473b-abbe-753954814c3d",
+   "task_id": "retail_idreuse_actioncamera_control",
+   "duration": 23.494707625000046,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I was wondering if you could tell me which items are in my order that contains the action camera?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To help you with that, could you please provide your email address? Alternatively, you can share your first and last name along with your zip code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, my email address is amelia.patel6926@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_bdfee3432f271d89",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "amelia.patel6926@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_bdfee3432f271d89",
+     "role": "tool",
+     "content": "amelia_patel_7834",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_e2dfdc4ebab42ffc",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "amelia_patel_7834"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_e2dfdc4ebab42ffc",
+     "role": "tool",
+     "content": "{\"user_id\": \"amelia_patel_7834\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Patel\"}, \"address\": {\"address1\": \"923 Elm Street\", \"address2\": \"Suite 362\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85051\"}, \"email\": \"amelia.patel6926@example.com\", \"payment_methods\": {\"gift_card_3751659\": {\"source\": \"gift_card\", \"id\": \"gift_card_3751659\", \"balance\": 20.0}}, \"orders\": [\"#W0000010\", \"#W6497157\", \"#W2079779\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_c59b848d2c71e4a2",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000010"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_c59b848d2c71e4a2",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"985 Pine Lane\", \"address2\": \"Suite 927\", \"city\": \"Phoenix\", \"country\": \"USA\", \"state\": \"AZ\", \"zip\": \"85047\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Your order containing the Action Camera is **#W0000010**. It contains the following items:\n\n1. **Action Camera** (Resolution: 1080p, Waterproof: No, Color: Black)\n2. **Sunglasses** (Frame Color: Black, Lens Color: Brown, Lens Type: Polarized, Frame Material: Plastic)\n\nIs there anything else I can help you with regarding this order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please. I would like to change the shipping address for that order to my new address: 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "To update the shipping address for your pending order **#W0000010** to:\n\n* **Address:** 664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA\n\nPlease confirm with a \"yes\" if you would like me to proceed with this modification.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "toolu_d61753770763db4e",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "address1": "664 Copper Ridge Road",
+        "address2": "Apt 2C",
+        "city": "Reno",
+        "country": "USA",
+        "order_id": "#W0000010",
+        "state": "NV",
+        "zip": "89509"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "toolu_d61753770763db4e",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000010\", \"user_id\": \"amelia_patel_7834\", \"address\": {\"address1\": \"664 Copper Ridge Road\", \"address2\": \"Apt 2C\", \"city\": \"Reno\", \"country\": \"USA\", \"state\": \"NV\", \"zip\": \"89509\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9168994198\", \"price\": 466.76, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"no\", \"color\": \"black\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4358482460\", \"price\": 290.94, \"options\": {\"frame color\": \"black\", \"lens color\": \"brown\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 757.7, \"payment_method_id\": \"gift_card_3751659\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W0000010** has been successfully updated to:\n664 Copper Ridge Road, Apt 2C, Reno, NV 89509, USA.\n\nIs there anything else I can do for you?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "That's all I needed. Thank you so much!\n\n###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 309,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 0,
+     "old": "#W2079779",
+     "new": "#W0000010"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 0,
+     "from_id": "#W9077472",
+     "to_id": "#W2079779"
+    },
+    {
+     "kind": "fired_at_start",
+     "hits": 0
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "05416931af06cb7537f497d8ba1b1550b4d863c8215403480267d4412734978f"
+  }
+ ]
+}

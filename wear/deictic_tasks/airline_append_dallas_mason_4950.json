@@ -1,0 +1,123 @@
+[
+ {
+  "id": "airline_append_dallas_mason_4950",
+  "_doc": "APPEND×identity (fresh;): referent LVRWYF (trip to Dallas), decoy ZZ9102 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9102' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: fresh resolution. Gold unchanged (LVRWYF).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9102"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to list all the trips on your account (destination cities and dates). SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to your trip to Dallas.",
+    "known_info": "You are Mason Patel, user id mason_patel_4950, date of birth 1991-05-19. Your one and only trip to Dallas departs from Charlotte on 2024-05-20.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9102": {
+       "reservation_id": "ZZ9102",
+       "user_id": "mason_patel_4950",
+       "origin": "CLT",
+       "destination": "DFW",
+       "flight_type": "one_way",
+       "cabin": "business",
+       "flights": [
+        {
+         "origin": "CLT",
+         "destination": "EWR",
+         "flight_number": "HAT108",
+         "date": "2024-05-23",
+         "price": 1273
+        },
+        {
+         "origin": "EWR",
+         "destination": "DFW",
+         "flight_number": "HAT213",
+         "date": "2024-05-23",
+         "price": 1127
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Mason",
+         "last_name": "Patel",
+         "dob": "1991-05-19"
+        },
+        {
+         "first_name": "Yara",
+         "last_name": "Jackson",
+         "dob": "1987-09-19"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "gift_card_2528898",
+         "amount": 4800
+        }
+       ],
+       "created_at": "2024-05-06T11:04:18",
+       "total_baggages": 0,
+       "nonfree_baggages": 0,
+       "insurance": "no"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "mason_patel_4950"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "LVRWYF"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "LVRWYF",
+      "total_baggages": 1,
+      "nonfree_baggages": 0,
+      "payment_id": "credit_card_1210123"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

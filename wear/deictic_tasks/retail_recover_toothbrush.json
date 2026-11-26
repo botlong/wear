@@ -1,0 +1,86 @@
+[
+ {
+  "id": "retail_recover_toothbrush",
+  "_doc": "RECOVERABLE id_reuse: referent = order with the electric toothbrush (#W6629830), distractor = #W4941028 (pending, address==profile so revert is possible), repoint #W6629830->#W0000011. Turn-3 user asks to re-verify and fix -> a silent wrong write becomes a TRANSIENT wrong write (final DB == gold, WEAR=1). Recovery is user-signal-induced by design.",
+  "_perturb": {
+   "knob": "id_reuse",
+   "target_tool": "get_order_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "trigger_arg": "order_id",
+    "trigger_arg_value": "#W6629830",
+    "collection": "orders",
+    "owner_list_attr": "orders",
+    "referent_id": "#W6629830",
+    "referent_new_id": "#W0000011",
+    "distractor_id": "#W4941028"
+   }
+  },
+  "_gold_remap": {
+   "#W6629830": "#W0000011"
+  },
+  "description": {
+   "purpose": "Transient wrong-entity write: silent wrong write, user-induced recovery, final state == gold.",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request.",
+    "domain": "retail",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to tell you which items are in your order that contains the electric toothbrush. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 12 Alder Court, Apt 6, Columbus, OH 43215, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip. FINALLY, after the agent confirms the address change, say you want to be absolutely sure it went to the right order: ask the agent to look up your orders again and confirm that the order containing the electric toothbrush now has the new address AND that every other order of yours still has its original shipping address — and if anything is off, ask the agent to fix it so exactly that is true.",
+    "known_info": "You are Harper Santos. For identity verification, your account email is harper.santos8390@example.com. Your NEW shipping address (what you want to change the order to) is 12 Alder Court, Apt 6, Columbus, OH 43215, USA.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "a0",
+     "name": "find_user_id_by_email",
+     "arguments": {
+      "email": "harper.santos8390@example.com"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "harper_santos_8115"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_order_details",
+     "arguments": {
+      "order_id": "#W6629830"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "modify_pending_order_address",
+     "arguments": {
+      "order_id": "#W6629830",
+      "address1": "12 Alder Court",
+      "address2": "Apt 6",
+      "city": "Columbus",
+      "state": "OH",
+      "country": "USA",
+      "zip": "43215"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

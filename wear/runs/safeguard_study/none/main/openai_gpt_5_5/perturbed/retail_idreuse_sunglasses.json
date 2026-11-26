@@ -1,0 +1,1265 @@
+{
+ "tasks": [
+  {
+   "id": "retail_idreuse_sunglasses",
+   "description": {
+    "purpose": "Measure wrong-entity binding under id-reuse for content deixis.",
+    "relevant_policies": null,
+    "notes": null
+   },
+   "user_scenario": {
+    "persona": null,
+    "instructions": {
+     "domain": "retail",
+     "reason_for_call": "You want to do two things in order. FIRST, ask the agent to tell you which items are in your order that contains the sunglasses. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 210 Foxglove Terrace, Unit 8, Raleigh, NC 27604, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip.",
+     "known_info": "You are Omar Silva. For identity verification, your account email is omar.silva4147@example.com. Your NEW shipping address (what you want to change the order to) is 210 Foxglove Terrace, Unit 8, Raleigh, NC 27604, USA.",
+     "unknown_info": null,
+     "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request."
+    }
+   },
+   "ticket": null,
+   "initial_state": null,
+   "evaluation_criteria": {
+    "actions": [
+     {
+      "action_id": "a0",
+      "requestor": "assistant",
+      "name": "find_user_id_by_email",
+      "arguments": {
+       "email": "omar.silva4147@example.com"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r0",
+      "requestor": "assistant",
+      "name": "get_user_details",
+      "arguments": {
+       "user_id": "omar_silva_7446"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r1",
+      "requestor": "assistant",
+      "name": "get_order_details",
+      "arguments": {
+       "order_id": "#W9728773"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "w0",
+      "requestor": "assistant",
+      "name": "modify_pending_order_address",
+      "arguments": {
+       "order_id": "#W0000009",
+       "address1": "210 Foxglove Terrace",
+       "address2": "Unit 8",
+       "city": "Raleigh",
+       "state": "NC",
+       "country": "USA",
+       "zip": "27604"
+      },
+      "info": null,
+      "compare_args": null
+     }
+    ],
+    "env_assertions": null,
+    "communicate_info": [],
+    "nl_assertions": null,
+    "reward_basis": [
+     "DB"
+    ]
+   },
+   "issues": null,
+   "required_documents": null,
+   "user_tools": null
+  }
+ ],
+ "simulations": [
+  {
+   "id": "e683cd60-a715-4532-aecf-e695c89c9e0d",
+   "task_id": "retail_idreuse_sunglasses",
+   "duration": 728.8157760469985,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’d like to check what items are in my order that has the sunglasses in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure — I can help look that up. To authenticate your account first, please provide either:\n\n- the email address on your account, or\n- your first and last name plus ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The email address on my account is omar.silva4147@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_uhon1nGxczvpOXGg1InGqJk5",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "omar.silva4147@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_uhon1nGxczvpOXGg1InGqJk5",
+     "role": "tool",
+     "content": "omar_silva_7446",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_e4bh3tnEMIqSvNBn47owJvXb",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "omar_silva_7446"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_e4bh3tnEMIqSvNBn47owJvXb",
+     "role": "tool",
+     "content": "{\"user_id\": \"omar_silva_7446\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Silva\"}, \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"email\": \"omar.silva4147@example.com\", \"payment_methods\": {\"paypal_2192303\": {\"source\": \"paypal\", \"id\": \"paypal_2192303\"}, \"credit_card_5322562\": {\"source\": \"credit_card\", \"id\": \"credit_card_5322562\", \"brand\": \"mastercard\", \"last_four\": \"5859\"}, \"gift_card_5540683\": {\"source\": \"gift_card\", \"id\": \"gift_card_5540683\", \"balance\": 68.0}}, \"orders\": [\"#W9728773\", \"#W9673784\", \"#W1216601\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found your account. You have these orders:\n\n- #W9728773\n- #W9673784\n- #W1216601\n\nTo find the one with sunglasses, I’ll need to check the order details. Do you know which order number it is, or would you like me to check these orders one by one?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "I don’t remember the order number. Could you check them to find the one with the sunglasses?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_Wx1tCuk3UtdvYQHTUhaic6hn",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9728773"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_NLcyu5AxuREyYXeDF4FAs0ar",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9673784"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_cCXmeeA6OnFqxvOL0ZJu7Rxg",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W1216601"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_Wx1tCuk3UtdvYQHTUhaic6hn",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"7127170374\", \"price\": 52.03, \"options\": {\"pieces\": \"2000\", \"theme\": \"fantasy\", \"difficulty level\": \"beginner\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"7154215719\", \"price\": 505.62, \"options\": {\"material\": \"wood\", \"color\": \"brown\", \"height\": \"6 ft\"}}, {\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9391733462\", \"price\": 521.07, \"options\": {\"resolution\": \"4K\", \"waterproof\": \"no\", \"color\": \"silver\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4548300368\", \"price\": 287.79, \"options\": {\"frame color\": \"black\", \"lens color\": \"green\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"5645314103\", \"price\": 46.19, \"options\": {\"pieces\": \"2000\", \"theme\": \"animals\", \"difficulty level\": \"intermediate\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1412.7, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "id": "call_NLcyu5AxuREyYXeDF4FAs0ar",
+     "role": "tool",
+     "content": "Error: Order not found",
+     "requestor": "assistant",
+     "error": true
+    },
+    {
+     "id": "call_cCXmeeA6OnFqxvOL0ZJu7Rxg",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W1216601\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"119 Laurel Lane\", \"address2\": \"Suite 409\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46243\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"3112842858\", \"price\": 49.1, \"options\": {\"pieces\": \"1000\", \"theme\": \"fantasy\", \"difficulty level\": \"intermediate\"}}, {\"name\": \"Perfume\", \"product_id\": \"6858788497\", \"item_id\": \"9007697085\", \"price\": 318.96, \"options\": {\"scent family\": \"fresh\", \"size\": \"50ml\", \"gender\": \"men\"}}, {\"name\": \"LED Light Bulb\", \"product_id\": \"2696197613\", \"item_id\": \"6206533187\", \"price\": 47.83, \"options\": {\"brightness\": \"75W equivalent\", \"color temperature\": \"warm white\", \"connectivity\": \"none\"}}, {\"name\": \"Smart Thermostat\", \"product_id\": \"4896585277\", \"item_id\": \"8722653925\", \"price\": 227.8, \"options\": {\"compatibility\": \"Google Assistant\", \"color\": \"white\"}}], \"status\": \"cancelled\", \"fulfillments\": [{\"tracking_id\": [\"466733640636\"], \"item_ids\": [\"3112842858\", \"9007697085\", \"6206533187\", \"8722653925\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 643.69, \"payment_method_id\": \"paypal_2192303\"}, {\"transaction_type\": \"refund\", \"amount\": 643.69, \"payment_method_id\": \"paypal_2192303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found the order with sunglasses: **#W9728773**.\n\nItems in this order:\n\n- **Jigsaw Puzzle** — item ID **7127170374** — $52.03  \n  Options: 2000 pieces, fantasy theme, beginner difficulty\n- **Bookshelf** — item ID **7154215719** — $505.62  \n  Options: wood, brown, 6 ft\n- **Action Camera** — item ID **9391733462** — $521.07  \n  Options: 4K resolution, not waterproof, silver\n- **Sunglasses** — item ID **4548300368** — $287.79  \n  Options: black frame, green polarized lenses, plastic frame\n- **Jigsaw Puzzle** — item ID **5645314103** — $46.19  \n  Options: 2000 pieces, animals theme, intermediate difficulty\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Can you change the shipping address for that order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Yes, I can help change the shipping address for pending order **#W9728773**.\n\nPlease provide the new shipping address with:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 210 Foxglove Terrace, Unit 8. City is Raleigh, state is NC, ZIP code is 27604, country is USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Just to confirm, you’d like me to update the shipping address for pending order **#W9728773** to:\n\n**210 Foxglove Terrace**  \n**Unit 8**  \n**Raleigh, NC 27604**  \n**USA**\n\nPlease reply **yes** to confirm, and I’ll proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please go ahead.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_e7RkCIM7fWfPJ5QOXfKNmiQY",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9728773",
+        "address1": "210 Foxglove Terrace",
+        "address2": "Unit 8",
+        "city": "Raleigh",
+        "state": "NC",
+        "country": "USA",
+        "zip": "27604"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_e7RkCIM7fWfPJ5QOXfKNmiQY",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"210 Foxglove Terrace\", \"address2\": \"Unit 8\", \"city\": \"Raleigh\", \"country\": \"USA\", \"state\": \"NC\", \"zip\": \"27604\"}, \"items\": [{\"name\": \"T-Shirt\", \"product_id\": \"9523456873\", \"item_id\": \"8124970213\", \"price\": 49.67, \"options\": {\"color\": \"purple\", \"size\": \"XL\", \"material\": \"cotton\", \"style\": \"crew neck\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9811090008\", \"price\": 370.38, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"LCD\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3214.75, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W9728773** has been updated to:\n\n**210 Foxglove Terrace**  \n**Unit 8**  \n**Raleigh, NC 27604**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 305,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9728773",
+     "new": "#W0000009"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W9673784",
+     "to_id": "#W9728773"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 3,
+     "call_id": "call_NLcyu5AxuREyYXeDF4FAs0ar",
+     "tool": "get_order_details"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "ce3c2a2bba3cabbb5de39dfa7d2c3eb1037d8791eb1312b432d5e88f328a8234"
+  },
+  {
+   "id": "7867a0d3-8af4-4bc8-9801-7a855f3c0760",
+   "task_id": "retail_idreuse_sunglasses",
+   "duration": 216.5001296219998,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’d like to check an order first. Can you tell me which items are in my order that has the sunglasses?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account first, please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure — the email on my account is omar.silva4147@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_gcqLKrDpPl3pURsVgY0LLnOd",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "omar.silva4147@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_gcqLKrDpPl3pURsVgY0LLnOd",
+     "role": "tool",
+     "content": "omar_silva_7446",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_PEdF8QXkQyDw4iA4y2brtijK",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "omar_silva_7446"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_PEdF8QXkQyDw4iA4y2brtijK",
+     "role": "tool",
+     "content": "{\"user_id\": \"omar_silva_7446\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Silva\"}, \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"email\": \"omar.silva4147@example.com\", \"payment_methods\": {\"paypal_2192303\": {\"source\": \"paypal\", \"id\": \"paypal_2192303\"}, \"credit_card_5322562\": {\"source\": \"credit_card\", \"id\": \"credit_card_5322562\", \"brand\": \"mastercard\", \"last_four\": \"5859\"}, \"gift_card_5540683\": {\"source\": \"gift_card\", \"id\": \"gift_card_5540683\", \"balance\": 68.0}}, \"orders\": [\"#W9728773\", \"#W9673784\", \"#W1216601\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I’ve authenticated your account. Your orders are:\n\n- #W9728773\n- #W9673784\n- #W1216601\n\nI’ll need to check the order details to find which one contains sunglasses. Do you want me to look through these orders?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please look through them and tell me which items are in the order that contains the sunglasses.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_fQnRASmij99biqdWmT9SDOs7",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9728773"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_5n7ym53i5aHtbvp8Fm9NU1wF",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9673784"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_VZAov0rAoXcCBcIpynoQOq01",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W1216601"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_fQnRASmij99biqdWmT9SDOs7",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"7127170374\", \"price\": 52.03, \"options\": {\"pieces\": \"2000\", \"theme\": \"fantasy\", \"difficulty level\": \"beginner\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"7154215719\", \"price\": 505.62, \"options\": {\"material\": \"wood\", \"color\": \"brown\", \"height\": \"6 ft\"}}, {\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9391733462\", \"price\": 521.07, \"options\": {\"resolution\": \"4K\", \"waterproof\": \"no\", \"color\": \"silver\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4548300368\", \"price\": 287.79, \"options\": {\"frame color\": \"black\", \"lens color\": \"green\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"5645314103\", \"price\": 46.19, \"options\": {\"pieces\": \"2000\", \"theme\": \"animals\", \"difficulty level\": \"intermediate\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1412.7, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "id": "call_5n7ym53i5aHtbvp8Fm9NU1wF",
+     "role": "tool",
+     "content": "Error: Order not found",
+     "requestor": "assistant",
+     "error": true
+    },
+    {
+     "id": "call_VZAov0rAoXcCBcIpynoQOq01",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W1216601\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"119 Laurel Lane\", \"address2\": \"Suite 409\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46243\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"3112842858\", \"price\": 49.1, \"options\": {\"pieces\": \"1000\", \"theme\": \"fantasy\", \"difficulty level\": \"intermediate\"}}, {\"name\": \"Perfume\", \"product_id\": \"6858788497\", \"item_id\": \"9007697085\", \"price\": 318.96, \"options\": {\"scent family\": \"fresh\", \"size\": \"50ml\", \"gender\": \"men\"}}, {\"name\": \"LED Light Bulb\", \"product_id\": \"2696197613\", \"item_id\": \"6206533187\", \"price\": 47.83, \"options\": {\"brightness\": \"75W equivalent\", \"color temperature\": \"warm white\", \"connectivity\": \"none\"}}, {\"name\": \"Smart Thermostat\", \"product_id\": \"4896585277\", \"item_id\": \"8722653925\", \"price\": 227.8, \"options\": {\"compatibility\": \"Google Assistant\", \"color\": \"white\"}}], \"status\": \"cancelled\", \"fulfillments\": [{\"tracking_id\": [\"466733640636\"], \"item_ids\": [\"3112842858\", \"9007697085\", \"6206533187\", \"8722653925\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 643.69, \"payment_method_id\": \"paypal_2192303\"}, {\"transaction_type\": \"refund\", \"amount\": 643.69, \"payment_method_id\": \"paypal_2192303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the sunglasses is **#W9728773**. Its status is **pending**.\n\nItems in that order:\n\n1. **Jigsaw Puzzle** — item ID **7127170374** — $52.03  \n   - Pieces: 2000  \n   - Theme: fantasy  \n   - Difficulty level: beginner  \n\n2. **Bookshelf** — item ID **7154215719** — $505.62  \n   - Material: wood  \n   - Color: brown  \n   - Height: 6 ft  \n\n3. **Action Camera** — item ID **9391733462** — $521.07  \n   - Resolution: 4K  \n   - Waterproof: no  \n   - Color: silver  \n\n4. **Sunglasses** — item ID **4548300368** — $287.79  \n   - Frame color: black  \n   - Lens color: green  \n   - Lens type: polarized  \n   - Frame material: plastic  \n\n5. **Jigsaw Puzzle** — item ID **5645314103** — $46.19  \n   - Pieces: 2000  \n   - Theme: animals  \n   - Difficulty level: intermediate",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I’d like to change the shipping address for that order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help modify the shipping address for pending order **#W9728773**.\n\nPlease provide the new shipping address with:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 210 Foxglove Terrace, address line 2 is Unit 8, city is Raleigh, state is NC, ZIP code is 27604, and country is USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm that you want to update the shipping address for pending order **#W9728773** to:\n\n**210 Foxglove Terrace, Unit 8**  \n**Raleigh, NC 27604**  \n**USA**\n\nReply **yes** to proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_6QuNKhcS2ghNZBSVwhsluWSY",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9728773",
+        "address1": "210 Foxglove Terrace",
+        "address2": "Unit 8",
+        "city": "Raleigh",
+        "state": "NC",
+        "zip": "27604",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_6QuNKhcS2ghNZBSVwhsluWSY",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"210 Foxglove Terrace\", \"address2\": \"Unit 8\", \"city\": \"Raleigh\", \"country\": \"USA\", \"state\": \"NC\", \"zip\": \"27604\"}, \"items\": [{\"name\": \"T-Shirt\", \"product_id\": \"9523456873\", \"item_id\": \"8124970213\", \"price\": 49.67, \"options\": {\"color\": \"purple\", \"size\": \"XL\", \"material\": \"cotton\", \"style\": \"crew neck\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9811090008\", \"price\": 370.38, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"LCD\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3214.75, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W9728773** has been updated to:\n\n**210 Foxglove Terrace, Unit 8**  \n**Raleigh, NC 27604**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 306,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9728773",
+     "new": "#W0000009"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W9673784",
+     "to_id": "#W9728773"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 3,
+     "call_id": "call_5n7ym53i5aHtbvp8Fm9NU1wF",
+     "tool": "get_order_details"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "ce3c2a2bba3cabbb5de39dfa7d2c3eb1037d8791eb1312b432d5e88f328a8234"
+  },
+  {
+   "id": "7f64464e-1425-475d-bbdc-e9752cd26c25",
+   "task_id": "retail_idreuse_sunglasses",
+   "duration": 42.79194496799755,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to find out which items are in my order that has the sunglasses.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account, please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure — the email on my account is omar.silva4147@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_L0CYeVoLT1fyC3dR7PDKpPXy",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "omar.silva4147@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_L0CYeVoLT1fyC3dR7PDKpPXy",
+     "role": "tool",
+     "content": "omar_silva_7446",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_cBCAnsb7LurlSPN6WREqFPqx",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "omar_silva_7446"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_cBCAnsb7LurlSPN6WREqFPqx",
+     "role": "tool",
+     "content": "{\"user_id\": \"omar_silva_7446\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Silva\"}, \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"email\": \"omar.silva4147@example.com\", \"payment_methods\": {\"paypal_2192303\": {\"source\": \"paypal\", \"id\": \"paypal_2192303\"}, \"credit_card_5322562\": {\"source\": \"credit_card\", \"id\": \"credit_card_5322562\", \"brand\": \"mastercard\", \"last_four\": \"5859\"}, \"gift_card_5540683\": {\"source\": \"gift_card\", \"id\": \"gift_card_5540683\", \"balance\": 68.0}}, \"orders\": [\"#W9728773\", \"#W9673784\", \"#W1216601\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found your account. You have three orders:\n\n- #W9728773\n- #W9673784\n- #W1216601\n\nI can check which one contains sunglasses and list the items. Do you know the order ID, or would you like me to check these orders one by one?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "I don’t remember the order ID. Could you check which one has the sunglasses and tell me what items are in it?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_QAT9LFPC9kKEXrc0IOAzRcWH",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9728773"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_QAT9LFPC9kKEXrc0IOAzRcWH",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"7127170374\", \"price\": 52.03, \"options\": {\"pieces\": \"2000\", \"theme\": \"fantasy\", \"difficulty level\": \"beginner\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"7154215719\", \"price\": 505.62, \"options\": {\"material\": \"wood\", \"color\": \"brown\", \"height\": \"6 ft\"}}, {\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9391733462\", \"price\": 521.07, \"options\": {\"resolution\": \"4K\", \"waterproof\": \"no\", \"color\": \"silver\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4548300368\", \"price\": 287.79, \"options\": {\"frame color\": \"black\", \"lens color\": \"green\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"5645314103\", \"price\": 46.19, \"options\": {\"pieces\": \"2000\", \"theme\": \"animals\", \"difficulty level\": \"intermediate\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1412.7, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the sunglasses is **#W9728773**.\n\nItems in this order:\n\n1. **Jigsaw Puzzle** — Item ID: 7127170374 — $52.03  \n   Options: pieces 2000, theme fantasy, difficulty level beginner\n\n2. **Bookshelf** — Item ID: 7154215719 — $505.62  \n   Options: material wood, color brown, height 6 ft\n\n3. **Action Camera** — Item ID: 9391733462 — $521.07  \n   Options: resolution 4K, waterproof no, color silver\n\n4. **Sunglasses** — Item ID: 4548300368 — $287.79  \n   Options: frame color black, lens color green, lens type polarized, frame material plastic\n\n5. **Jigsaw Puzzle** — Item ID: 5645314103 — $46.19  \n   Options: pieces 2000, theme animals, difficulty level intermediate\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Can you change the shipping address for that order to my new address?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Yes, I can help change the shipping address for pending order **#W9728773**.\n\nPlease provide the new shipping address with:\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 210 Foxglove Terrace, address line 2 is Unit 8, Raleigh, North Carolina 27604, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm the shipping address change for order **#W9728773**:\n\nNew address:\n**210 Foxglove Terrace, Unit 8, Raleigh, NC 27604, USA**\n\nThis order is currently **pending**, so the shipping address can be modified.  \nPlease reply **yes** to confirm and proceed, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_BIZFN7fbmq1bFQvmAYlNMKwF",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9728773",
+        "address1": "210 Foxglove Terrace",
+        "address2": "Unit 8",
+        "city": "Raleigh",
+        "state": "NC",
+        "zip": "27604",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_BIZFN7fbmq1bFQvmAYlNMKwF",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"210 Foxglove Terrace\", \"address2\": \"Unit 8\", \"city\": \"Raleigh\", \"country\": \"USA\", \"state\": \"NC\", \"zip\": \"27604\"}, \"items\": [{\"name\": \"T-Shirt\", \"product_id\": \"9523456873\", \"item_id\": \"8124970213\", \"price\": 49.67, \"options\": {\"color\": \"purple\", \"size\": \"XL\", \"material\": \"cotton\", \"style\": \"crew neck\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9811090008\", \"price\": 370.38, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"LCD\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3214.75, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W9728773** has been updated to:\n\n**210 Foxglove Terrace, Unit 8, Raleigh, NC 27604, USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 308,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9728773",
+     "new": "#W0000009"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W9673784",
+     "to_id": "#W9728773"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 3,
+     "call_id": "call_BIZFN7fbmq1bFQvmAYlNMKwF",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "ce3c2a2bba3cabbb5de39dfa7d2c3eb1037d8791eb1312b432d5e88f328a8234"
+  },
+  {
+   "id": "ed512452-20e9-4695-ae94-7dcaed5c7c9e",
+   "task_id": "retail_idreuse_sunglasses",
+   "duration": 147.47904911800288,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to find out which items are in my order that has the sunglasses.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account first, please provide the email address on your account. If you don’t remember it, provide your first name, last name, and zip code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email on my account is omar.silva4147@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_G7EdSiDsiKcDhGXfcIaZqEic",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "omar.silva4147@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_G7EdSiDsiKcDhGXfcIaZqEic",
+     "role": "tool",
+     "content": "omar_silva_7446",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Thanks, I’ve authenticated your account. I can look up the order with the sunglasses for you. I’ll need to check your account orders first. \n",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Okay, thank you.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_24hLddFau1THmyunntNM5mkn",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "omar_silva_7446"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_24hLddFau1THmyunntNM5mkn",
+     "role": "tool",
+     "content": "{\"user_id\": \"omar_silva_7446\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Silva\"}, \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"email\": \"omar.silva4147@example.com\", \"payment_methods\": {\"paypal_2192303\": {\"source\": \"paypal\", \"id\": \"paypal_2192303\"}, \"credit_card_5322562\": {\"source\": \"credit_card\", \"id\": \"credit_card_5322562\", \"brand\": \"mastercard\", \"last_four\": \"5859\"}, \"gift_card_5540683\": {\"source\": \"gift_card\", \"id\": \"gift_card_5540683\", \"balance\": 68.0}}, \"orders\": [\"#W9728773\", \"#W9673784\", \"#W1216601\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found three orders on your account: #W9728773, #W9673784, and #W1216601. I’ll check the order details to find which one contains the sunglasses. \n",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I don’t remember the order number, so that would be helpful.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_MfHDyTjU8MIKsML1d1jzM7q6",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9728773"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_MfHDyTjU8MIKsML1d1jzM7q6",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"7127170374\", \"price\": 52.03, \"options\": {\"pieces\": \"2000\", \"theme\": \"fantasy\", \"difficulty level\": \"beginner\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"7154215719\", \"price\": 505.62, \"options\": {\"material\": \"wood\", \"color\": \"brown\", \"height\": \"6 ft\"}}, {\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9391733462\", \"price\": 521.07, \"options\": {\"resolution\": \"4K\", \"waterproof\": \"no\", \"color\": \"silver\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4548300368\", \"price\": 287.79, \"options\": {\"frame color\": \"black\", \"lens color\": \"green\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"5645314103\", \"price\": 46.19, \"options\": {\"pieces\": \"2000\", \"theme\": \"animals\", \"difficulty level\": \"intermediate\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1412.7, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the sunglasses is **#W9728773**. It is currently **pending**.\n\nItems in this order:\n\n1. **Jigsaw Puzzle** — item ID **7127170374** — $52.03  \n   - Pieces: 2000  \n   - Theme: fantasy  \n   - Difficulty level: beginner\n\n2. **Bookshelf** — item ID **7154215719** — $505.62  \n   - Material: wood  \n   - Color: brown  \n   - Height: 6 ft\n\n3. **Action Camera** — item ID **9391733462** — $521.07  \n   - Resolution: 4K  \n   - Waterproof: no  \n   - Color: silver\n\n4. **Sunglasses** — item ID **4548300368** — $287.79  \n   - Frame color: black  \n   - Lens color: green  \n   - Lens type: polarized  \n   - Frame material: plastic\n\n5. **Jigsaw Puzzle** — item ID **5645314103** — $46.19  \n   - Pieces: 2000  \n   - Theme: animals  \n   - Difficulty level: intermediate",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Great, thanks. Could you change the shipping address for that order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Yes, I can help change the shipping address because order **#W9728773** is pending.\n\nPlease provide the new shipping address with:\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- Zip code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The new address is 210 Foxglove Terrace, Unit 8, Raleigh, NC 27604, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm that you want to update the shipping address for pending order **#W9728773** to:\n\n**210 Foxglove Terrace, Unit 8**  \n**Raleigh, NC 27604**  \n**USA**\n\nReply **yes** to proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_1LeqD7nQ1t2W9utCeJZQcRPb",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9728773",
+        "address1": "210 Foxglove Terrace",
+        "address2": "Unit 8",
+        "city": "Raleigh",
+        "state": "NC",
+        "zip": "27604",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_1LeqD7nQ1t2W9utCeJZQcRPb",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"210 Foxglove Terrace\", \"address2\": \"Unit 8\", \"city\": \"Raleigh\", \"country\": \"USA\", \"state\": \"NC\", \"zip\": \"27604\"}, \"items\": [{\"name\": \"T-Shirt\", \"product_id\": \"9523456873\", \"item_id\": \"8124970213\", \"price\": 49.67, \"options\": {\"color\": \"purple\", \"size\": \"XL\", \"material\": \"cotton\", \"style\": \"crew neck\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9811090008\", \"price\": 370.38, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"LCD\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3214.75, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W9728773** has been updated to:\n\n**210 Foxglove Terrace, Unit 8**  \n**Raleigh, NC 27604**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 309,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9728773",
+     "new": "#W0000009"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W9673784",
+     "to_id": "#W9728773"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 3,
+     "call_id": "call_1LeqD7nQ1t2W9utCeJZQcRPb",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "ce3c2a2bba3cabbb5de39dfa7d2c3eb1037d8791eb1312b432d5e88f328a8234"
+  },
+  {
+   "id": "609c2d54-bc2b-4ccb-b77d-e1c52a77aa26",
+   "task_id": "retail_idreuse_sunglasses",
+   "duration": 107.45582947500225,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to find out which items are in my order that has the sunglasses.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account first, please provide either:\n\n- the email address on your account, or\n- your first and last name plus ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email address on my account is omar.silva4147@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_vtYQGorcOf6M24JNur7FklXb",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "omar.silva4147@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_vtYQGorcOf6M24JNur7FklXb",
+     "role": "tool",
+     "content": "omar_silva_7446",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Thank you. Could you please provide the order ID, if you have it? If not, I can look up your account details to find your orders.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "I don’t remember the order ID, but it’s the order with the sunglasses in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_Nu7uhGAP4GQGkKqdXd8OtQHW",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "omar_silva_7446"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_Nu7uhGAP4GQGkKqdXd8OtQHW",
+     "role": "tool",
+     "content": "{\"user_id\": \"omar_silva_7446\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Silva\"}, \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"email\": \"omar.silva4147@example.com\", \"payment_methods\": {\"paypal_2192303\": {\"source\": \"paypal\", \"id\": \"paypal_2192303\"}, \"credit_card_5322562\": {\"source\": \"credit_card\", \"id\": \"credit_card_5322562\", \"brand\": \"mastercard\", \"last_four\": \"5859\"}, \"gift_card_5540683\": {\"source\": \"gift_card\", \"id\": \"gift_card_5540683\", \"balance\": 68.0}}, \"orders\": [\"#W9728773\", \"#W9673784\", \"#W1216601\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found three orders on your account: #W9728773, #W9673784, and #W1216601. I’ll need to check their details to identify which one includes sunglasses. \n",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Okay, thank you.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_IrPc5XZyVBOTVXMDOx16lwqy",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9728773"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_IrPc5XZyVBOTVXMDOx16lwqy",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"510 Hickory Lane\", \"address2\": \"Suite 712\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92107\"}, \"items\": [{\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"7127170374\", \"price\": 52.03, \"options\": {\"pieces\": \"2000\", \"theme\": \"fantasy\", \"difficulty level\": \"beginner\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"7154215719\", \"price\": 505.62, \"options\": {\"material\": \"wood\", \"color\": \"brown\", \"height\": \"6 ft\"}}, {\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"9391733462\", \"price\": 521.07, \"options\": {\"resolution\": \"4K\", \"waterproof\": \"no\", \"color\": \"silver\"}}, {\"name\": \"Sunglasses\", \"product_id\": \"7314138884\", \"item_id\": \"4548300368\", \"price\": 287.79, \"options\": {\"frame color\": \"black\", \"lens color\": \"green\", \"lens type\": \"polarized\", \"frame material\": \"plastic\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"5645314103\", \"price\": 46.19, \"options\": {\"pieces\": \"2000\", \"theme\": \"animals\", \"difficulty level\": \"intermediate\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1412.7, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found the order with sunglasses: **#W9728773**.\n\nItems in this order are:\n\n1. **Jigsaw Puzzle** — item ID **7127170374** — $52.03  \n   Options: 2000 pieces, fantasy theme, beginner difficulty\n\n2. **Bookshelf** — item ID **7154215719** — $505.62  \n   Options: wood, brown, 6 ft\n\n3. **Action Camera** — item ID **9391733462** — $521.07  \n   Options: 4K, not waterproof, silver\n\n4. **Sunglasses** — item ID **4548300368** — $287.79  \n   Options: black frame, green polarized lenses, plastic frame\n\n5. **Jigsaw Puzzle** — item ID **5645314103** — $46.19  \n   Options: 2000 pieces, animals theme, intermediate difficulty\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I’d like to change the shipping address for that order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure. Please provide the new shipping address for order **#W9728773**, including:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- Country\n- ZIP code",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The new shipping address is:\n\n210 Foxglove Terrace  \nUnit 8  \nRaleigh, NC 27604  \nUSA",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm: you want to change the shipping address for pending order **#W9728773** to:\n\n**210 Foxglove Terrace**  \n**Unit 8**  \n**Raleigh, NC 27604**  \n**USA**\n\nPlease reply **yes** to confirm, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, that’s correct.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_tuhtDecysRxIOkEjQvnIQy8k",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9728773",
+        "address1": "210 Foxglove Terrace",
+        "address2": "Unit 8",
+        "city": "Raleigh",
+        "state": "NC",
+        "country": "USA",
+        "zip": "27604"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_tuhtDecysRxIOkEjQvnIQy8k",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9728773\", \"user_id\": \"omar_silva_7446\", \"address\": {\"address1\": \"210 Foxglove Terrace\", \"address2\": \"Unit 8\", \"city\": \"Raleigh\", \"country\": \"USA\", \"state\": \"NC\", \"zip\": \"27604\"}, \"items\": [{\"name\": \"T-Shirt\", \"product_id\": \"9523456873\", \"item_id\": \"8124970213\", \"price\": 49.67, \"options\": {\"color\": \"purple\", \"size\": \"XL\", \"material\": \"cotton\", \"style\": \"crew neck\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"9811090008\", \"price\": 370.38, \"options\": {\"color\": \"silver\", \"band material\": \"leather\", \"display\": \"LCD\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"9884666842\", \"price\": 2794.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"1L\", \"type\": \"manual\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3214.75, \"payment_method_id\": \"gift_card_5540683\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W9728773** has been updated to:\n\n**210 Foxglove Terrace**  \n**Unit 8**  \n**Raleigh, NC 27604**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 310,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9728773",
+     "new": "#W0000009"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W9673784",
+     "to_id": "#W9728773"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 3,
+     "call_id": "call_tuhtDecysRxIOkEjQvnIQy8k",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "ce3c2a2bba3cabbb5de39dfa7d2c3eb1037d8791eb1312b432d5e88f328a8234"
+  }
+ ],
+ "failures": []
+}

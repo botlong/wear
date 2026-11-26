@@ -1,0 +1,1375 @@
+{
+ "tasks": [
+  {
+   "id": "retail_idreuse_airpurifier",
+   "description": {
+    "purpose": "Measure wrong-entity binding under id-reuse for content deixis.",
+    "relevant_policies": null,
+    "notes": null
+   },
+   "user_scenario": {
+    "persona": null,
+    "instructions": {
+     "domain": "retail",
+     "reason_for_call": "You want to do two things in order. FIRST, ask the agent to tell you which items are in your order that contains the air purifier. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 77 Birchwood Court, Apt 21, Madison, WI 53704, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip.",
+     "known_info": "You are Emma Smith. For identity verification, your account email is emma.smith3991@example.com. Your NEW shipping address (what you want to change the order to) is 77 Birchwood Court, Apt 21, Madison, WI 53704, USA.",
+     "unknown_info": null,
+     "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request."
+    }
+   },
+   "ticket": null,
+   "initial_state": null,
+   "evaluation_criteria": {
+    "actions": [
+     {
+      "action_id": "a0",
+      "requestor": "assistant",
+      "name": "find_user_id_by_email",
+      "arguments": {
+       "email": "emma.smith3991@example.com"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r0",
+      "requestor": "assistant",
+      "name": "get_user_details",
+      "arguments": {
+       "user_id": "emma_smith_8564"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r1",
+      "requestor": "assistant",
+      "name": "get_order_details",
+      "arguments": {
+       "order_id": "#W3614011"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "w0",
+      "requestor": "assistant",
+      "name": "modify_pending_order_address",
+      "arguments": {
+       "order_id": "#W0000005",
+       "address1": "77 Birchwood Court",
+       "address2": "Apt 21",
+       "city": "Madison",
+       "state": "WI",
+       "country": "USA",
+       "zip": "53704"
+      },
+      "info": null,
+      "compare_args": null
+     }
+    ],
+    "env_assertions": null,
+    "communicate_info": [],
+    "nl_assertions": null,
+    "reward_basis": [
+     "DB"
+    ]
+   },
+   "issues": null,
+   "required_documents": null,
+   "user_tools": null
+  }
+ ],
+ "simulations": [
+  {
+   "id": "96248e41-eaf8-4286-8b59-0c28d49a0898",
+   "task_id": "retail_idreuse_airpurifier",
+   "duration": 45.72892062500023,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m Emma Smith. I have an order that contains an air purifier, and I’d like to know what other items are in that order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account, please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email address on my account is emma.smith3991@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_64NmDISN0N0ixbwlyUQbiVpo",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "emma.smith3991@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_64NmDISN0N0ixbwlyUQbiVpo",
+     "role": "tool",
+     "content": "emma_smith_8564",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_yJ2gDpQApDKl3xQ2UL3X0zPn",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "emma_smith_8564"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_yJ2gDpQApDKl3xQ2UL3X0zPn",
+     "role": "tool",
+     "content": "{\"user_id\": \"emma_smith_8564\", \"name\": {\"first_name\": \"Emma\", \"last_name\": \"Smith\"}, \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"email\": \"emma.smith3991@example.com\", \"payment_methods\": {\"gift_card_8541487\": {\"source\": \"gift_card\", \"id\": \"gift_card_8541487\", \"balance\": 62.0}, \"paypal_6228291\": {\"source\": \"paypal\", \"id\": \"paypal_6228291\"}}, \"orders\": [\"#W2417020\", \"#W5605613\", \"#W3614011\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Thanks, Emma — you’re authenticated.\n\nI see three orders on your account: #W2417020, #W5605613, and #W3614011. I’ll need to check the order details to find which one contains the air purifier.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Okay, thank you. Please check which one has the air purifier and let me know the items in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_fqz0tSmLffxVIX4cCFUi4Hwl",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2417020"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_fqz0tSmLffxVIX4cCFUi4Hwl",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2417020\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_rDOYw6aN2T8UmKQhWCLnhnkO",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W5605613"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_rDOYw6aN2T8UmKQhWCLnhnkO",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W5605613\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Digital Camera\", \"product_id\": \"8940227892\", \"item_id\": \"7195021808\", \"price\": 2909.87, \"options\": {\"resolution\": \"30MP\", \"zoom\": \"5x\", \"storage\": \"SD card\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"267160774045\"], \"item_ids\": [\"7195021808\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2909.87, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_mTcelNK31LK8fLwhBG9jSlP3",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W3614011"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_mTcelNK31LK8fLwhBG9jSlP3",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"5436236388\", \"price\": 538.6, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"yes\", \"color\": \"silver\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"3076708684\", \"price\": 535.97, \"options\": {\"room size\": \"medium\", \"filter type\": \"HEPA\", \"features\": \"quiet operation\"}}, {\"name\": \"Sneakers\", \"product_id\": \"7471004230\", \"item_id\": \"4410138384\", \"price\": 197.37, \"options\": {\"size\": \"8\", \"color\": \"gray\", \"material\": \"canvas\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1271.94, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the Air Purifier is **#W3614011**.\n\nItems in that order are:\n\n1. **Action Camera**\n   - Item ID: 5436236388\n   - Price: $538.60\n   - Options: resolution 1080p, waterproof yes, color silver\n\n2. **Air Purifier**\n   - Item ID: 3076708684\n   - Price: $535.97\n   - Options: room size medium, filter type HEPA, features quiet operation\n\n3. **Sneakers**\n   - Item ID: 4410138384\n   - Price: $197.37\n   - Options: size 8, color gray, material canvas\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Since that order is still pending, I’d like to change the shipping address for it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help change the shipping address for pending order **#W3614011**.\n\nPlease provide the new shipping address, including:\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The new shipping address is:\n\n77 Birchwood Court, Apt 21  \nMadison, WI 53704  \nUSA",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm the address change for pending order **#W3614011**:\n\nNew shipping address:\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**\n\nIf this is correct, please reply **yes** to proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, that’s correct. Please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_mbHfLRwkG4AUPi67T9xkQqps",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W3614011",
+        "address1": "77 Birchwood Court",
+        "address2": "Apt 21",
+        "city": "Madison",
+        "state": "WI",
+        "zip": "53704",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_mbHfLRwkG4AUPi67T9xkQqps",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"77 Birchwood Court\", \"address2\": \"Apt 21\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53704\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W3614011** has been updated to:\n\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 300,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W3614011",
+     "new": "#W0000005"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W2417020",
+     "to_id": "#W3614011"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 5,
+     "call_id": "call_mbHfLRwkG4AUPi67T9xkQqps",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "f5040835e820076d0cf92a2b3386f5121c91ef5a61645e2a768c69c4e4bf94a6"
+  },
+  {
+   "id": "4a60d97e-4980-4b3d-8752-28f0533d5de0",
+   "task_id": "retail_idreuse_airpurifier",
+   "duration": 40.65137088099982,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’d like to know which items are in my order that has the air purifier in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To look up your account, please provide the email address on your account. If you don’t remember it, I can use your first name, last name, and ZIP code instead.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email is emma.smith3991@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_xZUsJLHgNUFv85k9xUR6f23S",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "emma.smith3991@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_xZUsJLHgNUFv85k9xUR6f23S",
+     "role": "tool",
+     "content": "emma_smith_8564",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_MVVXh3TFKy63e1dtZhsuTVdK",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "emma_smith_8564"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_MVVXh3TFKy63e1dtZhsuTVdK",
+     "role": "tool",
+     "content": "{\"user_id\": \"emma_smith_8564\", \"name\": {\"first_name\": \"Emma\", \"last_name\": \"Smith\"}, \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"email\": \"emma.smith3991@example.com\", \"payment_methods\": {\"gift_card_8541487\": {\"source\": \"gift_card\", \"id\": \"gift_card_8541487\", \"balance\": 62.0}, \"paypal_6228291\": {\"source\": \"paypal\", \"id\": \"paypal_6228291\"}}, \"orders\": [\"#W2417020\", \"#W5605613\", \"#W3614011\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found your account. Your orders are #W2417020, #W5605613, and #W3614011. I’ll need to check the order details to find which one contains the air purifier. \n",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Okay, thank you.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_JijBCE5COVm9k2yVSFt9Xid1",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2417020"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_5mxWzKL6LXFMHGdvjvkJmx44",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W5605613"
+       },
+       "requestor": "assistant"
+      },
+      {
+       "id": "call_at764pyzT5KrjWOMTiSzy0TU",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W3614011"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_JijBCE5COVm9k2yVSFt9Xid1",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2417020\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "id": "call_5mxWzKL6LXFMHGdvjvkJmx44",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W5605613\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Digital Camera\", \"product_id\": \"8940227892\", \"item_id\": \"7195021808\", \"price\": 2909.87, \"options\": {\"resolution\": \"30MP\", \"zoom\": \"5x\", \"storage\": \"SD card\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"267160774045\"], \"item_ids\": [\"7195021808\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2909.87, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "id": "call_at764pyzT5KrjWOMTiSzy0TU",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"5436236388\", \"price\": 538.6, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"yes\", \"color\": \"silver\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"3076708684\", \"price\": 535.97, \"options\": {\"room size\": \"medium\", \"filter type\": \"HEPA\", \"features\": \"quiet operation\"}}, {\"name\": \"Sneakers\", \"product_id\": \"7471004230\", \"item_id\": \"4410138384\", \"price\": 197.37, \"options\": {\"size\": \"8\", \"color\": \"gray\", \"material\": \"canvas\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1271.94, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the air purifier is **#W3614011**. It contains:\n\n- **Action Camera** — item ID **5436236388** — $538.60  \n  Options: resolution 1080p, waterproof yes, color silver\n- **Air Purifier** — item ID **3076708684** — $535.97  \n  Options: room size medium, filter type HEPA, features quiet operation\n- **Sneakers** — item ID **4410138384** — $197.37  \n  Options: size 8, color gray, material canvas\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I’d like to change the shipping address for that order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure. Please provide the new shipping address for order **#W3614011**, including:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The new address is 77 Birchwood Court, Apt 21, Madison, WI 53704, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm the address change for pending order **#W3614011**:\n\nNew shipping address:\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**\n\nPlease reply **yes** to confirm, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please confirm the change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_VpGgOIC5hzLakMYbmgesRJyo",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W3614011",
+        "address1": "77 Birchwood Court",
+        "address2": "Apt 21",
+        "city": "Madison",
+        "state": "WI",
+        "zip": "53704",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_VpGgOIC5hzLakMYbmgesRJyo",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"77 Birchwood Court\", \"address2\": \"Apt 21\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53704\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Your shipping address for order **#W3614011** has been updated to:\n\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 301,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W3614011",
+     "new": "#W0000005"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W2417020",
+     "to_id": "#W3614011"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 5,
+     "call_id": "call_VpGgOIC5hzLakMYbmgesRJyo",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "f5040835e820076d0cf92a2b3386f5121c91ef5a61645e2a768c69c4e4bf94a6"
+  },
+  {
+   "id": "02d738fc-0efb-4050-b68d-2f16c38002f3",
+   "task_id": "retail_idreuse_airpurifier",
+   "duration": 46.94861510800001,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I need help with the order that has the air purifier in it. Could you tell me what items are included in that order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. First, I need to authenticate your account. Please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email on my account is emma.smith3991@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_fPZWDvRbafPiULTL7Mia128A",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "emma.smith3991@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_fPZWDvRbafPiULTL7Mia128A",
+     "role": "tool",
+     "content": "emma_smith_8564",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_J79kcVBt3g6rJdgCClaIfVHV",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "emma_smith_8564"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_J79kcVBt3g6rJdgCClaIfVHV",
+     "role": "tool",
+     "content": "{\"user_id\": \"emma_smith_8564\", \"name\": {\"first_name\": \"Emma\", \"last_name\": \"Smith\"}, \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"email\": \"emma.smith3991@example.com\", \"payment_methods\": {\"gift_card_8541487\": {\"source\": \"gift_card\", \"id\": \"gift_card_8541487\", \"balance\": 62.0}, \"paypal_6228291\": {\"source\": \"paypal\", \"id\": \"paypal_6228291\"}}, \"orders\": [\"#W2417020\", \"#W5605613\", \"#W3614011\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_Xh50hrDc67uOACfNH8Dca1Df",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2417020"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_Xh50hrDc67uOACfNH8Dca1Df",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2417020\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_rRH8nifrlOLCMvp0KelaE2Jv",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W5605613"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_rRH8nifrlOLCMvp0KelaE2Jv",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W5605613\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Digital Camera\", \"product_id\": \"8940227892\", \"item_id\": \"7195021808\", \"price\": 2909.87, \"options\": {\"resolution\": \"30MP\", \"zoom\": \"5x\", \"storage\": \"SD card\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"267160774045\"], \"item_ids\": [\"7195021808\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2909.87, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_V4EIjd4nK9sj5LAdmkUgB7NH",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W3614011"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_V4EIjd4nK9sj5LAdmkUgB7NH",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"5436236388\", \"price\": 538.6, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"yes\", \"color\": \"silver\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"3076708684\", \"price\": 535.97, \"options\": {\"room size\": \"medium\", \"filter type\": \"HEPA\", \"features\": \"quiet operation\"}}, {\"name\": \"Sneakers\", \"product_id\": \"7471004230\", \"item_id\": \"4410138384\", \"price\": 197.37, \"options\": {\"size\": \"8\", \"color\": \"gray\", \"material\": \"canvas\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1271.94, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the Air Purifier is **#W3614011**. It includes:\n\n- **Action Camera** — item ID **5436236388** — $538.60  \n  Options: resolution 1080p, waterproof yes, color silver\n- **Air Purifier** — item ID **3076708684** — $535.97  \n  Options: room size medium, filter type HEPA, features quiet operation\n- **Sneakers** — item ID **4410138384** — $197.37  \n  Options: size 8, color gray, material canvas\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Could you change the shipping address for that order to my new address?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure. Please provide the full new shipping address for order **#W3614011**, including:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The new address is 77 Birchwood Court, Apt 21, Madison, WI 53704, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm the shipping address change for pending order **#W3614011**:\n\nNew shipping address:\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**\n\nIf everything is correct, please reply **yes** to proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, that’s correct.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_3yCf81ClHQ4KmJAoFiCweQnr",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W3614011",
+        "address1": "77 Birchwood Court",
+        "address2": "Apt 21",
+        "city": "Madison",
+        "state": "WI",
+        "zip": "53704",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_3yCf81ClHQ4KmJAoFiCweQnr",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"77 Birchwood Court\", \"address2\": \"Apt 21\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53704\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Your shipping address has been updated for order **#W3614011** to:\n\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 302,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W3614011",
+     "new": "#W0000005"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W2417020",
+     "to_id": "#W3614011"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 5,
+     "call_id": "call_3yCf81ClHQ4KmJAoFiCweQnr",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "f5040835e820076d0cf92a2b3386f5121c91ef5a61645e2a768c69c4e4bf94a6"
+  },
+  {
+   "id": "565dc351-f63c-43b2-964c-4f3315bb7ada",
+   "task_id": "retail_idreuse_airpurifier",
+   "duration": 44.89362348399982,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to find out which items are in my order that has the air purifier in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account, please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email on my account is emma.smith3991@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_pkjFbZi5eOHPyVTCIGXimGlj",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "emma.smith3991@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_pkjFbZi5eOHPyVTCIGXimGlj",
+     "role": "tool",
+     "content": "emma_smith_8564",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_TsKAgJMUNAovdfnr97mZotti",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "emma_smith_8564"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_TsKAgJMUNAovdfnr97mZotti",
+     "role": "tool",
+     "content": "{\"user_id\": \"emma_smith_8564\", \"name\": {\"first_name\": \"Emma\", \"last_name\": \"Smith\"}, \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"email\": \"emma.smith3991@example.com\", \"payment_methods\": {\"gift_card_8541487\": {\"source\": \"gift_card\", \"id\": \"gift_card_8541487\", \"balance\": 62.0}, \"paypal_6228291\": {\"source\": \"paypal\", \"id\": \"paypal_6228291\"}}, \"orders\": [\"#W2417020\", \"#W5605613\", \"#W3614011\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found your account. You have three orders: #W2417020, #W5605613, and #W3614011.\n\nI’ll need to check the order details to identify which one contains the air purifier. I can look them up one at a time. \n",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Okay, please check which one has the air purifier and let me know what items are in it.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_CmBVPuwdvRLSr7jGXzNQ5Xf8",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2417020"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_CmBVPuwdvRLSr7jGXzNQ5Xf8",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2417020\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_tb2nnMseeIDuuF02RVCB7tyJ",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W5605613"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_tb2nnMseeIDuuF02RVCB7tyJ",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W5605613\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Digital Camera\", \"product_id\": \"8940227892\", \"item_id\": \"7195021808\", \"price\": 2909.87, \"options\": {\"resolution\": \"30MP\", \"zoom\": \"5x\", \"storage\": \"SD card\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"267160774045\"], \"item_ids\": [\"7195021808\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2909.87, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_e47eE1uB4M7pXEFdhn1FyXCc",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W3614011"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_e47eE1uB4M7pXEFdhn1FyXCc",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"5436236388\", \"price\": 538.6, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"yes\", \"color\": \"silver\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"3076708684\", \"price\": 535.97, \"options\": {\"room size\": \"medium\", \"filter type\": \"HEPA\", \"features\": \"quiet operation\"}}, {\"name\": \"Sneakers\", \"product_id\": \"7471004230\", \"item_id\": \"4410138384\", \"price\": 197.37, \"options\": {\"size\": \"8\", \"color\": \"gray\", \"material\": \"canvas\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1271.94, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the air purifier is **#W3614011**. Its status is **pending**.\n\nItems in this order:\n\n1. **Action Camera**\n   - Item ID: 5436236388\n   - Price: $538.60\n   - Options: resolution 1080p, waterproof yes, color silver\n\n2. **Air Purifier**\n   - Item ID: 3076708684\n   - Price: $535.97\n   - Options: room size medium, filter type HEPA, features quiet operation\n\n3. **Sneakers**\n   - Item ID: 4410138384\n   - Price: $197.37\n   - Options: size 8, color gray, material canvas\n\nOrder total paid: **$1,271.94** via gift card.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I’d like to change the shipping address for that order.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure. Since order **#W3614011** is pending, the shipping address can be modified.\n\nPlease provide the new shipping address with:\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 77 Birchwood Court, address line 2 is Apt 21, Madison, Wisconsin, 53704, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm the address change for pending order **#W3614011**.\n\nCurrent order shipping address:\n**243 Hillcrest Drive, Suite 113, New York, NY 10192, USA**\n\nNew shipping address:\n**77 Birchwood Court, Apt 21, Madison, WI 53704, USA**\n\nIf this is correct, please reply **yes** to proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, that’s correct.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_LhSDFZ5ErCnbszSKS1qVmcrv",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W3614011",
+        "address1": "77 Birchwood Court",
+        "address2": "Apt 21",
+        "city": "Madison",
+        "state": "WI",
+        "zip": "53704",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_LhSDFZ5ErCnbszSKS1qVmcrv",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"77 Birchwood Court\", \"address2\": \"Apt 21\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53704\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W3614011** has been updated to:\n\n**77 Birchwood Court, Apt 21, Madison, WI 53704, USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 303,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W3614011",
+     "new": "#W0000005"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W2417020",
+     "to_id": "#W3614011"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 5,
+     "call_id": "call_LhSDFZ5ErCnbszSKS1qVmcrv",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "f5040835e820076d0cf92a2b3386f5121c91ef5a61645e2a768c69c4e4bf94a6"
+  },
+  {
+   "id": "0941fcd5-2dbf-4956-a31a-24d97186f8bd",
+   "task_id": "retail_idreuse_airpurifier",
+   "duration": 44.4122595140002,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to check on my order that has the air purifier in it. Could you tell me which items are included in that order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To access your order information, I first need to authenticate your identity. Please provide either:\n\n- the email address on your account, or\n- your first name, last name, and ZIP code.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure — the email address on my account is emma.smith3991@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_kBce6UBqpK1A8QSASjr3U2Hw",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "emma.smith3991@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_kBce6UBqpK1A8QSASjr3U2Hw",
+     "role": "tool",
+     "content": "emma_smith_8564",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_TS8qPcJGzxAhHgyRQoi6YQ1X",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "emma_smith_8564"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_TS8qPcJGzxAhHgyRQoi6YQ1X",
+     "role": "tool",
+     "content": "{\"user_id\": \"emma_smith_8564\", \"name\": {\"first_name\": \"Emma\", \"last_name\": \"Smith\"}, \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"email\": \"emma.smith3991@example.com\", \"payment_methods\": {\"gift_card_8541487\": {\"source\": \"gift_card\", \"id\": \"gift_card_8541487\", \"balance\": 62.0}, \"paypal_6228291\": {\"source\": \"paypal\", \"id\": \"paypal_6228291\"}}, \"orders\": [\"#W2417020\", \"#W5605613\", \"#W3614011\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found your account. To identify the order with the air purifier, I’ll need to check your order details. I have these orders on your account:\n\n- #W2417020\n- #W5605613\n- #W3614011\n\nDo you know which order ID it is, or would you like me to check them for the air purifier?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "I don’t remember the order ID. Could you check them for the one with the air purifier?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_tHARdXRRaQXaldpDUklCvoUL",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2417020"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_tHARdXRRaQXaldpDUklCvoUL",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2417020\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_E3PIvOPhBSR1bcqWwhMOFOUr",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W5605613"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_E3PIvOPhBSR1bcqWwhMOFOUr",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W5605613\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Digital Camera\", \"product_id\": \"8940227892\", \"item_id\": \"7195021808\", \"price\": 2909.87, \"options\": {\"resolution\": \"30MP\", \"zoom\": \"5x\", \"storage\": \"SD card\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"267160774045\"], \"item_ids\": [\"7195021808\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2909.87, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_GN1KCyohAC4tvc2to3nvQCKd",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W3614011"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_GN1KCyohAC4tvc2to3nvQCKd",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"243 Hillcrest Drive\", \"address2\": \"Suite 113\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10192\"}, \"items\": [{\"name\": \"Action Camera\", \"product_id\": \"3377618313\", \"item_id\": \"5436236388\", \"price\": 538.6, \"options\": {\"resolution\": \"1080p\", \"waterproof\": \"yes\", \"color\": \"silver\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"3076708684\", \"price\": 535.97, \"options\": {\"room size\": \"medium\", \"filter type\": \"HEPA\", \"features\": \"quiet operation\"}}, {\"name\": \"Sneakers\", \"product_id\": \"7471004230\", \"item_id\": \"4410138384\", \"price\": 197.37, \"options\": {\"size\": \"8\", \"color\": \"gray\", \"material\": \"canvas\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1271.94, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order with the air purifier is **#W3614011**. It includes these items:\n\n- **Action Camera** — item ID **5436236388** — $538.60  \n  Options: resolution 1080p, waterproof yes, color silver\n- **Air Purifier** — item ID **3076708684** — $535.97  \n  Options: room size medium, filter type HEPA, features quiet operation\n- **Sneakers** — item ID **4410138384** — $197.37  \n  Options: size 8, color gray, material canvas\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Could you change the shipping address for that order?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Yes, I can help change the shipping address for pending order **#W3614011**.\n\nPlease provide the new shipping address with:\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- ZIP code\n- Country",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 77 Birchwood Court, address line 2 is Apt 21, Madison, Wisconsin 53704, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm that you want to update the shipping address for order **#W3614011** to:\n\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**\n\nThis order is currently pending. Reply **yes** to confirm, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please update it to that address.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_tKjnpWHLwJL86D6o2fXtmr4n",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W3614011",
+        "address1": "77 Birchwood Court",
+        "address2": "Apt 21",
+        "city": "Madison",
+        "state": "WI",
+        "zip": "53704",
+        "country": "USA"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_tKjnpWHLwJL86D6o2fXtmr4n",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W3614011\", \"user_id\": \"emma_smith_8564\", \"address\": {\"address1\": \"77 Birchwood Court\", \"address2\": \"Apt 21\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53704\"}, \"items\": [{\"name\": \"Laptop\", \"product_id\": \"4760268021\", \"item_id\": \"8997785118\", \"price\": 2674.4, \"options\": {\"screen size\": \"13-inch\", \"processor\": \"i7\", \"ram\": \"32GB\", \"storage\": \"256GB SSD\", \"color\": \"space grey\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2674.4, \"payment_method_id\": \"gift_card_8541487\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address for order **#W3614011** has been updated to:\n\n**77 Birchwood Court, Apt 21**  \n**Madison, WI 53704**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 304,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W3614011",
+     "new": "#W0000005"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W2417020",
+     "to_id": "#W3614011"
+    },
+    {
+     "kind": "fired",
+     "hits": 1,
+     "call_index": 5,
+     "call_id": "call_tKjnpWHLwJL86D6o2fXtmr4n",
+     "tool": "modify_pending_order_address"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "f5040835e820076d0cf92a2b3386f5121c91ef5a61645e2a768c69c4e4bf94a6"
+  }
+ ],
+ "failures": []
+}

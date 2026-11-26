@@ -1,0 +1,87 @@
+[
+ {
+  "id": "retail_idreuse_espresso_control",
+  "_doc": "CONTROL (no-stale-cache) twin of retail_idreuse_espresso: same perturbation & final world, fired BEFORE rollout start -> referent already at #W0000003 when agent first reads; expected WEAR=0.",
+  "_perturb": {
+   "knob": "id_reuse",
+   "target_tool": "get_order_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "trigger_arg": "order_id",
+    "trigger_arg_value": "#W2090453",
+    "collection": "orders",
+    "owner_list_attr": "orders",
+    "referent_id": "#W2090453",
+    "referent_new_id": "#W0000003",
+    "distractor_id": "#W5663445"
+   },
+   "fire_at_start": true
+  },
+  "_gold_remap": {
+   "#W2090453": "#W0000003"
+  },
+  "description": {
+   "purpose": "Measure wrong-entity binding under id-reuse for content deixis.",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request.",
+    "domain": "retail",
+    "reason_for_call": "You want to do two things in order. FIRST, ask the agent to tell you which items are in your order that contains the espresso machine. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 1968 Willow Creek Drive, Apt 7B, Portland, OR 97218, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip.",
+    "known_info": "You are Olivia Jackson. For identity verification, your account email is olivia.jackson2465@example.com. Your NEW shipping address (what you want to change the order to) is 1968 Willow Creek Drive, Apt 7B, Portland, OR 97218, USA.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "a0",
+     "name": "find_user_id_by_email",
+     "arguments": {
+      "email": "olivia.jackson2465@example.com"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "olivia_jackson_1219"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_order_details",
+     "arguments": {
+      "order_id": "#W2090453"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "modify_pending_order_address",
+     "arguments": {
+      "order_id": "#W2090453",
+      "address1": "1968 Willow Creek Drive",
+      "address2": "Apt 7B",
+      "city": "Portland",
+      "state": "OR",
+      "country": "USA",
+      "zip": "97218"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

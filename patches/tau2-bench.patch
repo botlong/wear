@@ -1,0 +1,191 @@
+diff --git a/src/tau2/config.py b/src/tau2/config.py
+index d8a8ace..2a6fa06 100644
+--- a/src/tau2/config.py
++++ b/src/tau2/config.py
+@@ -1,3 +1,5 @@
++import os  # WEAR patch: allow env override of judge/eval models
++
+ # =============================================================================
+ # SIMULATION DEFAULTS (overridable via CLI)
+ # =============================================================================
+@@ -21,11 +23,11 @@ DEFAULT_LLM_TEMPERATURE_USER = 0.0
+ DEFAULT_LLM_ARGS_AGENT = {"temperature": DEFAULT_LLM_TEMPERATURE_AGENT}
+ DEFAULT_LLM_ARGS_USER = {"temperature": DEFAULT_LLM_TEMPERATURE_USER}
+ 
+-DEFAULT_LLM_NL_ASSERTIONS = "gpt-4.1-2025-04-14"
++DEFAULT_LLM_NL_ASSERTIONS = os.getenv("TAU2_LLM_NL_ASSERTIONS", "gpt-4.1-2025-04-14")
+ DEFAULT_LLM_NL_ASSERTIONS_TEMPERATURE = 0.0
+ DEFAULT_LLM_NL_ASSERTIONS_ARGS = {"temperature": DEFAULT_LLM_NL_ASSERTIONS_TEMPERATURE}
+ 
+-DEFAULT_LLM_ENV_INTERFACE = "gpt-4.1-2025-04-14"
++DEFAULT_LLM_ENV_INTERFACE = os.getenv("TAU2_LLM_ENV_INTERFACE", "gpt-4.1-2025-04-14")
+ DEFAULT_LLM_ENV_INTERFACE_TEMPERATURE = 0.0
+ DEFAULT_LLM_ENV_INTERFACE_ARGS = {"temperature": DEFAULT_LLM_ENV_INTERFACE_TEMPERATURE}
+ 
+diff --git a/src/tau2/evaluator/evaluator_nl_assertions.py b/src/tau2/evaluator/evaluator_nl_assertions.py
+index 1f5397c..4d0cc44 100644
+--- a/src/tau2/evaluator/evaluator_nl_assertions.py
++++ b/src/tau2/evaluator/evaluator_nl_assertions.py
+@@ -124,7 +124,16 @@ class NLAssertionsEvaluator(EvaluatorBase[Message]):
+             call_name="nl_assertions_eval",
+             **DEFAULT_LLM_NL_ASSERTIONS_ARGS,
+         )
+-        result_data = json.loads(assistant_message.content)
++        # WEAR patch: tolerate judges (e.g. gemini) that wrap JSON in ```fences/prose.
++        _content = assistant_message.content or ""
++        try:
++            result_data = json.loads(_content)
++        except json.JSONDecodeError:
++            import re as _re
++            _m = _re.search(r"\{.*\}", _content, _re.DOTALL)
++            if _m is None:
++                raise
++            result_data = json.loads(_m.group(0))
+         return [
+             NLAssertionCheck(
+                 nl_assertion=result["expectedOutcome"],
+diff --git a/src/tau2/utils/llm_utils.py b/src/tau2/utils/llm_utils.py
+index e9d8156..81105f2 100644
+--- a/src/tau2/utils/llm_utils.py
++++ b/src/tau2/utils/llm_utils.py
+@@ -2,6 +2,7 @@ import json
+ import logging
+ import os
+ import re
++import threading
+ import time
+ import uuid
+ import warnings
+@@ -59,6 +60,48 @@ llm_log_dir: ContextVar[Optional[Path]] = ContextVar("llm_log_dir", default=None
+ # Context variable to store the LLM logging mode ("all" or "latest")
+ llm_log_mode: ContextVar[str] = ContextVar("llm_log_mode", default="latest")
+ 
++
++def _env_json(name: str):
++    """WEAR patch: parse a JSON-valued env var; fail fast (naming the var) on
++    malformed JSON — skipping silently could route calls to the wrong endpoint
++    or drop required fields. Returns None when unset."""
++    raw = os.getenv(name)
++    if raw is None:
++        return None
++    try:
++        return json.loads(raw)
++    except json.JSONDecodeError as e:
++        raise ValueError(f"invalid JSON in env {name}: {raw[:80]!r}") from e
++
++
++_THROTTLE_LOCK = threading.Lock()
++_THROTTLE_LAST: dict = {}
++
++
++def _throttle(model: str) -> None:
++    """WEAR patch: enforce a per-model minimum call interval
++    (env TAU2_LLM_MIN_INTERVAL_S, JSON {full model string: seconds}).
++    In-process throttle for rate-limited endpoints; does not wrap litellm's
++    retry path, but throttled first calls rarely need retries. Off by default."""
++    mi = _env_json("TAU2_LLM_MIN_INTERVAL_S")
++    if not mi:
++        return
++    try:
++        gap = float(mi.get(model) or 0)
++    except (TypeError, ValueError) as e:
++        raise ValueError(
++            f"TAU2_LLM_MIN_INTERVAL_S[{model}] must be a number") from e
++    if gap <= 0:  # zero/negative means unconfigured; avoid a half-enabled state
++        return
++    while True:
++        with _THROTTLE_LOCK:
++            now = time.monotonic()
++            wait = _THROTTLE_LAST.get(model, 0.0) + float(gap) - now
++            if wait <= 0:
++                _THROTTLE_LAST[model] = now
++                return
++        time.sleep(min(wait, 1.0))
++
+ # litellm._turn_on_debug()
+ 
+ logging.getLogger("LiteLLM").setLevel(logging.WARNING)
+@@ -392,6 +435,31 @@ def generate(
+ 
+     # Prepare request data for logging
+     formatted_messages = _format_messages_for_logging(litellm_messages)
++    # WEAR patch: per-model kwarg overrides (JSON {full model string:
++    # {api_base, api_key, ...}}) so the agent and auxiliary judges in one
++    # process can use different endpoints. Precedence: explicit caller kwargs
++    # > per-model > EXTRA_KWARGS (all setdefault; this block runs first).
++    # Off by default.
++    _pmk = _env_json("TAU2_LLM_PER_MODEL_KWARGS")
++    if _pmk:
++        for _k, _v in (_pmk.get(model) or {}).items():
++            kwargs.setdefault(_k, _v)
++    # WEAR patch: some OpenAI-compatible endpoints require fields such as
++    # max_tokens; allow env-injected default kwargs (explicit caller values
++    # win). Off by default.
++    _extra = _env_json("TAU2_LLM_EXTRA_KWARGS")
++    if _extra:
++        for _k, _v in _extra.items():
++            kwargs.setdefault(_k, _v)
++    # WEAR patch: some endpoints reject specific kwargs (e.g. HTTP 400
++    # "Unsupported parameter: seed"); allow env-driven dropping of listed
++    # keys, before request_data is recorded so logs reflect the actual
++    # request. Off by default.
++    _drop = _env_json("TAU2_LLM_DROP_KWARGS")
++    if _drop:
++        for _k in _drop:
++            kwargs.pop(_k, None)
++
+     request_data = {
+         "model": model,
+         "messages": formatted_messages,
+@@ -400,19 +468,44 @@ def generate(
+         "kwargs": {
+             k: str(v) if not isinstance(v, (str, int, float, bool, type(None))) else v
+             for k, v in kwargs.items()
++            if k != "api_key"  # never log endpoint credentials
+         },
+     }
+     request_timestamp = datetime.now().isoformat()
+ 
++    _throttle(model)  # WEAR patch: optional per-model throttle
+     start_time = time.perf_counter()
+     try:
+-        response = completion(
+-            model=model,
+-            messages=litellm_messages,
+-            tools=tools_schema,
+-            tool_choice=tool_choice,
+-            **kwargs,
+-        )
++        if os.getenv("TAU2_LLM_STREAM") == "1":
++            # WEAR patch: streaming-only endpoints — pull the stream, then
++            # rebuild a full ModelResponse; stream_options requests usage on
++            # the final chunk. Pop potentially duplicated keys first to avoid
++            # a duplicate-kwarg TypeError. Off by default.
++            skw = dict(kwargs)
++            skw.pop("stream", None)
++            skw.pop("stream_options", None)
++            chunks = list(
++                completion(
++                    model=model,
++                    messages=litellm_messages,
++                    tools=tools_schema,
++                    tool_choice=tool_choice,
++                    stream=True,
++                    stream_options={"include_usage": True},
++                    **skw,
++                )
++            )
++            response = litellm.stream_chunk_builder(
++                chunks, messages=litellm_messages
++            )
++        else:
++            response = completion(
++                model=model,
++                messages=litellm_messages,
++                tools=tools_schema,
++                tool_choice=tool_choice,
++                **kwargs,
++            )
+     except Exception as e:
+         logger.error(e)
+         raise e

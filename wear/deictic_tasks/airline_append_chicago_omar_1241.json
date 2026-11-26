@@ -1,0 +1,118 @@
+[
+ {
+  "id": "airline_append_chicago_omar_1241",
+  "_doc": "APPEND×identity (fresh;): referent FQ8APE (trip to Chicago), decoy ZZ9103 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9103' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: fresh resolution. Gold unchanged (FQ8APE).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9103"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to list all the trips on your account (destination cities and dates). SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to your trip to Chicago.",
+    "known_info": "You are Omar Rossi, user id omar_rossi_1241, date of birth 1970-06-06. Your one and only trip to Chicago departs from Newark on 2024-05-25.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9103": {
+       "reservation_id": "ZZ9103",
+       "user_id": "omar_rossi_1241",
+       "origin": "EWR",
+       "destination": "ORD",
+       "flight_type": "one_way",
+       "cabin": "basic_economy",
+       "flights": [
+        {
+         "origin": "EWR",
+         "destination": "IAH",
+         "flight_number": "HAT056",
+         "date": "2024-05-28",
+         "price": 71
+        },
+        {
+         "origin": "IAH",
+         "destination": "ORD",
+         "flight_number": "HAT138",
+         "date": "2024-05-28",
+         "price": 60
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Ivan",
+         "last_name": "Garcia",
+         "dob": "1960-12-01"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "gift_card_8190333",
+         "amount": 161
+        }
+       ],
+       "created_at": "2024-05-01T16:18:10",
+       "total_baggages": 0,
+       "nonfree_baggages": 0,
+       "insurance": "yes"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "omar_rossi_1241"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "FQ8APE"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "FQ8APE",
+      "total_baggages": 1,
+      "nonfree_baggages": 0,
+      "payment_id": "credit_card_6754990"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

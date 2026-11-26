@@ -1,0 +1,463 @@
+{
+ "tasks": [
+  {
+   "id": "retail_recover_desklamp",
+   "description": {
+    "purpose": "Transient wrong-entity write: silent wrong write, user-induced recovery, final state == gold.",
+    "relevant_policies": null,
+    "notes": null
+   },
+   "user_scenario": {
+    "persona": null,
+    "instructions": {
+     "domain": "retail",
+     "reason_for_call": "You want to do three things in order. FIRST, ask the agent to tell you which items are in your order that contains the desk lamp. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 742 Juniper Street, Suite 5, Madison, WI 53703, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip. FINALLY, after the agent confirms the address change, say you want to be absolutely sure it went to the right order: ask the agent to look up your orders again and confirm that the order containing the desk lamp now has the new address AND that every other order of yours still has its original shipping address — and if anything is off, ask the agent to fix it so exactly that is true.",
+     "known_info": "You are Mia Jackson. For identity verification, your account email is mia.jackson5798@example.com. Your NEW shipping address (what you want to change the order to) is 742 Juniper Street, Suite 5, Madison, WI 53703, USA.",
+     "unknown_info": null,
+     "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request."
+    }
+   },
+   "ticket": null,
+   "initial_state": null,
+   "evaluation_criteria": {
+    "actions": [
+     {
+      "action_id": "a0",
+      "requestor": "assistant",
+      "name": "find_user_id_by_email",
+      "arguments": {
+       "email": "mia.jackson5798@example.com"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r0",
+      "requestor": "assistant",
+      "name": "get_user_details",
+      "arguments": {
+       "user_id": "mia_jackson_2250"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r1",
+      "requestor": "assistant",
+      "name": "get_order_details",
+      "arguments": {
+       "order_id": "#W7807323"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "w0",
+      "requestor": "assistant",
+      "name": "modify_pending_order_address",
+      "arguments": {
+       "order_id": "#W0000015",
+       "address1": "742 Juniper Street",
+       "address2": "Suite 5",
+       "city": "Madison",
+       "state": "WI",
+       "country": "USA",
+       "zip": "53703"
+      },
+      "info": null,
+      "compare_args": null
+     }
+    ],
+    "env_assertions": null,
+    "communicate_info": [],
+    "nl_assertions": null,
+    "reward_basis": [
+     "DB"
+    ]
+   },
+   "issues": null,
+   "required_documents": null,
+   "user_tools": null
+  }
+ ],
+ "simulations": [
+  {
+   "id": "95c65a6a-9164-4593-b904-1a123b7286ec",
+   "task_id": "retail_recover_desklamp",
+   "duration": 127.47729547800009,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to check on one of my orders. Could you tell me which items are in the order that contains the desk lamp?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure — I can help with that. To authenticate your account, please provide the email address on your account. If you don’t remember it, I can use your first name, last name, and ZIP code instead.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "The email on my account is mia.jackson5798@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_Kr0Lljx3YN9VmWFcWnGgzxwM",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "mia.jackson5798@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_Kr0Lljx3YN9VmWFcWnGgzxwM",
+     "role": "tool",
+     "content": "mia_jackson_2250",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_69WKrxx53a3IVBHSAJz4wOSL",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "mia_jackson_2250"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_69WKrxx53a3IVBHSAJz4wOSL",
+     "role": "tool",
+     "content": "{\"user_id\": \"mia_jackson_2250\", \"name\": {\"first_name\": \"Mia\", \"last_name\": \"Jackson\"}, \"address\": {\"address1\": \"816 Spruce Street\", \"address2\": \"Suite 114\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46227\"}, \"email\": \"mia.jackson5798@example.com\", \"payment_methods\": {\"gift_card_5715854\": {\"source\": \"gift_card\", \"id\": \"gift_card_5715854\", \"balance\": 70.0}, \"paypal_2031016\": {\"source\": \"paypal\", \"id\": \"paypal_2031016\"}}, \"orders\": [\"#W7807323\", \"#W1205816\", \"#W6236251\", \"#W2618034\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_TDLW1K0Scz3oqnnouW01NIFP",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W7807323"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_TDLW1K0Scz3oqnnouW01NIFP",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W7807323\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"816 Spruce Street\", \"address2\": \"Suite 114\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46227\"}, \"items\": [{\"name\": \"Desk Lamp\", \"product_id\": \"6817146515\", \"item_id\": \"5320792178\", \"price\": 135.24, \"options\": {\"color\": \"black\", \"brightness\": \"medium\", \"power source\": \"AC adapter\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"4875647558\", \"price\": 2805.77, \"options\": {\"pressure\": \"15 bar\", \"capacity\": \"1L\", \"type\": \"capsule\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"9335834276\", \"price\": 137.92, \"options\": {\"capacity\": \"2L\", \"material\": \"glass\", \"color\": \"black\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3078.93, \"payment_method_id\": \"gift_card_5715854\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The order containing the Desk Lamp is **#W7807323**. It includes these items:\n\n- **Desk Lamp** — item ID **5320792178** — $135.24  \n  Options: black, medium brightness, AC adapter\n- **Espresso Machine** — item ID **4875647558** — $2,805.77  \n  Options: 15 bar, 1L, capsule\n- **Electric Kettle** — item ID **9335834276** — $137.92  \n  Options: 2L, glass, black\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. Could you change the shipping address for that order to my new address? It’s 742 Juniper Street, Suite 5, Madison, WI 53703, USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can update the shipping address for pending order **#W7807323**.\n\nCurrent shipping address:\n**816 Spruce Street, Suite 114, Indianapolis, IN 46227, USA**\n\nNew shipping address:\n**742 Juniper Street, Suite 5, Madison, WI 53703, USA**\n\nPlease confirm: do you want me to proceed with this address change? Please reply **yes** or **no**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed with that address change.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_Su1FmFvJQj7cBrmGUJ6b6sSy",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W7807323",
+        "address1": "742 Juniper Street",
+        "address2": "Suite 5",
+        "city": "Madison",
+        "state": "WI",
+        "country": "USA",
+        "zip": "53703"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_Su1FmFvJQj7cBrmGUJ6b6sSy",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W7807323\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"742 Juniper Street\", \"address2\": \"Suite 5\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53703\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"4947717507\", \"price\": 218.04, \"options\": {\"color\": \"green\", \"size\": \"medium\", \"material\": \"leather\", \"compartment\": \"camera\"}}, {\"name\": \"Tea Kettle\", \"product_id\": \"9832717871\", \"item_id\": \"3312883418\", \"price\": 104.82, \"options\": {\"material\": \"ceramic\", \"capacity\": \"1.5 liters\", \"stovetop compatibility\": \"induction\"}}, {\"name\": \"Cycling Helmet\", \"product_id\": \"7765186836\", \"item_id\": \"5537798301\", \"price\": 204.47, \"options\": {\"size\": \"S\", \"color\": \"black\", \"ventilation\": \"medium\"}}, {\"name\": \"Wireless Earbuds\", \"product_id\": \"9924732112\", \"item_id\": \"1646531091\", \"price\": 232.49, \"options\": {\"color\": \"blue\", \"battery life\": \"6 hours\", \"water resistance\": \"IPX4\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 759.82, \"payment_method_id\": \"paypal_2031016\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "The shipping address has been updated to:\n\n**742 Juniper Street, Suite 5, Madison, WI 53703, USA**\n\nOrder **#W7807323** remains **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "I want to be absolutely sure it went to the right order. Could you look up my orders again and confirm that that order now has the new address, and that every other order of mine still has its original shipping address? If anything is off, please fix it so exactly that is true.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_iXj1KwJgpNLUTXTGHFvqJMFf",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "mia_jackson_2250"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_iXj1KwJgpNLUTXTGHFvqJMFf",
+     "role": "tool",
+     "content": "{\"user_id\": \"mia_jackson_2250\", \"name\": {\"first_name\": \"Mia\", \"last_name\": \"Jackson\"}, \"address\": {\"address1\": \"816 Spruce Street\", \"address2\": \"Suite 114\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46227\"}, \"email\": \"mia.jackson5798@example.com\", \"payment_methods\": {\"gift_card_5715854\": {\"source\": \"gift_card\", \"id\": \"gift_card_5715854\", \"balance\": 70.0}, \"paypal_2031016\": {\"source\": \"paypal\", \"id\": \"paypal_2031016\"}}, \"orders\": [\"#W0000015\", \"#W7807323\", \"#W6236251\", \"#W2618034\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_yPmTuCKJCnNPuEy3F7BWF8YW",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W7807323"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_yPmTuCKJCnNPuEy3F7BWF8YW",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W7807323\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"742 Juniper Street\", \"address2\": \"Suite 5\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53703\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"4947717507\", \"price\": 218.04, \"options\": {\"color\": \"green\", \"size\": \"medium\", \"material\": \"leather\", \"compartment\": \"camera\"}}, {\"name\": \"Tea Kettle\", \"product_id\": \"9832717871\", \"item_id\": \"3312883418\", \"price\": 104.82, \"options\": {\"material\": \"ceramic\", \"capacity\": \"1.5 liters\", \"stovetop compatibility\": \"induction\"}}, {\"name\": \"Cycling Helmet\", \"product_id\": \"7765186836\", \"item_id\": \"5537798301\", \"price\": 204.47, \"options\": {\"size\": \"S\", \"color\": \"black\", \"ventilation\": \"medium\"}}, {\"name\": \"Wireless Earbuds\", \"product_id\": \"9924732112\", \"item_id\": \"1646531091\", \"price\": 232.49, \"options\": {\"color\": \"blue\", \"battery life\": \"6 hours\", \"water resistance\": \"IPX4\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 759.82, \"payment_method_id\": \"paypal_2031016\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_0RyACECKRuCLjrpYfeEAzol8",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000015"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_0RyACECKRuCLjrpYfeEAzol8",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000015\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"816 Spruce Street\", \"address2\": \"Suite 114\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46227\"}, \"items\": [{\"name\": \"Desk Lamp\", \"product_id\": \"6817146515\", \"item_id\": \"5320792178\", \"price\": 135.24, \"options\": {\"color\": \"black\", \"brightness\": \"medium\", \"power source\": \"AC adapter\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"4875647558\", \"price\": 2805.77, \"options\": {\"pressure\": \"15 bar\", \"capacity\": \"1L\", \"type\": \"capsule\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"9335834276\", \"price\": 137.92, \"options\": {\"capacity\": \"2L\", \"material\": \"glass\", \"color\": \"black\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3078.93, \"payment_method_id\": \"gift_card_5715854\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_feWiMOZDGt4gN9gvNIiuQqFI",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W6236251"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_feWiMOZDGt4gN9gvNIiuQqFI",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W6236251\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"629 Sunset Drive\", \"address2\": \"Suite 581\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92159\"}, \"items\": [{\"name\": \"Vacuum Cleaner\", \"product_id\": \"1762337868\", \"item_id\": \"4965355367\", \"price\": 620.07, \"options\": {\"type\": \"robotic\", \"bagged/bagless\": \"bagless\", \"features\": \"pet hair removal\"}}, {\"name\": \"Smart Watch\", \"product_id\": \"6945232052\", \"item_id\": \"2540052208\", \"price\": 346.42, \"options\": {\"color\": \"gold\", \"band material\": \"silicone\", \"display\": \"LCD\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"4402162122\", \"price\": 233.9, \"options\": {\"switch type\": \"tactile\", \"backlight\": \"RGB\", \"size\": \"60%\"}}, {\"name\": \"Water Bottle\", \"product_id\": \"8310926033\", \"item_id\": \"9127591879\", \"price\": 48.47, \"options\": {\"capacity\": \"750ml\", \"material\": \"stainless steel\", \"color\": \"black\"}}, {\"name\": \"Makeup Kit\", \"product_id\": \"5149340237\", \"item_id\": \"5012998807\", \"price\": 258.71, \"options\": {\"skin tone\": \"dark\", \"kit size\": \"professional\", \"brand\": \"Brand B\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1507.57, \"payment_method_id\": \"gift_card_5715854\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_dJJUYAxeqvIHDImmzYvvryz5",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W2618034"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_dJJUYAxeqvIHDImmzYvvryz5",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W2618034\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"982 Laurel Lane\", \"address2\": \"Suite 332\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32113\"}, \"items\": [{\"name\": \"Garden Hose\", \"product_id\": \"6679515468\", \"item_id\": \"9829827210\", \"price\": 90.43, \"options\": {\"length\": \"25ft\", \"material\": \"vinyl\", \"color\": \"blue\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"8018699955\", \"price\": 467.86, \"options\": {\"material\": \"metal\", \"color\": \"brown\", \"height\": \"4 ft\"}}, {\"name\": \"Jigsaw Puzzle\", \"product_id\": \"1808611083\", \"item_id\": \"3112842858\", \"price\": 49.1, \"options\": {\"pieces\": \"1000\", \"theme\": \"fantasy\", \"difficulty level\": \"intermediate\"}}, {\"name\": \"Grill\", \"product_id\": \"6819683148\", \"item_id\": \"5745575001\", \"price\": 986.65, \"options\": {\"type\": \"electric\", \"size\": \"portable\", \"features\": \"rotisserie\"}}, {\"name\": \"Gaming Mouse\", \"product_id\": \"5713490933\", \"item_id\": \"2880340443\", \"price\": 137.22, \"options\": {\"color\": \"white\", \"sensor type\": \"optical\", \"connectivity\": \"wired\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1731.26, \"payment_method_id\": \"paypal_2031016\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I checked your orders, and something is off:\n\n- The order containing the **Desk Lamp** is now **#W0000015**, and it still has the original address:  \n  **816 Spruce Street, Suite 114, Indianapolis, IN 46227, USA**\n\n- Order **#W7807323** currently has the new Madison address, but it does **not** contain the Desk Lamp. It contains Backpack, Tea Kettle, Cycling Helmet, and Wireless Earbuds.\n\nYour other orders are:\n- **#W6236251** — still at **629 Sunset Drive, Suite 581, San Diego, CA 92159, USA**\n- **#W2618034** — still at **982 Laurel Lane, Suite 332, Jacksonville, FL 32113, USA**\n\nTo make it exactly right, I need to make these address changes:\n1. Change **#W0000015** — the Desk Lamp order — to:  \n   **742 Juniper Street, Suite 5, Madison, WI 53703, USA**\n2. Change **#W7807323** back to the original address:  \n   **816 Spruce Street, Suite 114, Indianapolis, IN 46227, USA**\n\nPlease confirm: do you want me to proceed with both address corrections? Please reply **yes** or **no**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed with both address corrections.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_vjZO1XXbQQ34qRRxWJQpC2Gs",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W0000015",
+        "address1": "742 Juniper Street",
+        "address2": "Suite 5",
+        "city": "Madison",
+        "state": "WI",
+        "country": "USA",
+        "zip": "53703"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_vjZO1XXbQQ34qRRxWJQpC2Gs",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000015\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"742 Juniper Street\", \"address2\": \"Suite 5\", \"city\": \"Madison\", \"country\": \"USA\", \"state\": \"WI\", \"zip\": \"53703\"}, \"items\": [{\"name\": \"Desk Lamp\", \"product_id\": \"6817146515\", \"item_id\": \"5320792178\", \"price\": 135.24, \"options\": {\"color\": \"black\", \"brightness\": \"medium\", \"power source\": \"AC adapter\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"4875647558\", \"price\": 2805.77, \"options\": {\"pressure\": \"15 bar\", \"capacity\": \"1L\", \"type\": \"capsule\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"9335834276\", \"price\": 137.92, \"options\": {\"capacity\": \"2L\", \"material\": \"glass\", \"color\": \"black\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 3078.93, \"payment_method_id\": \"gift_card_5715854\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_ulFAYScM0a2a16cTvgZWcEn8",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W7807323",
+        "address1": "816 Spruce Street",
+        "address2": "Suite 114",
+        "city": "Indianapolis",
+        "state": "IN",
+        "country": "USA",
+        "zip": "46227"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_ulFAYScM0a2a16cTvgZWcEn8",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W7807323\", \"user_id\": \"mia_jackson_2250\", \"address\": {\"address1\": \"816 Spruce Street\", \"address2\": \"Suite 114\", \"city\": \"Indianapolis\", \"country\": \"USA\", \"state\": \"IN\", \"zip\": \"46227\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"4947717507\", \"price\": 218.04, \"options\": {\"color\": \"green\", \"size\": \"medium\", \"material\": \"leather\", \"compartment\": \"camera\"}}, {\"name\": \"Tea Kettle\", \"product_id\": \"9832717871\", \"item_id\": \"3312883418\", \"price\": 104.82, \"options\": {\"material\": \"ceramic\", \"capacity\": \"1.5 liters\", \"stovetop compatibility\": \"induction\"}}, {\"name\": \"Cycling Helmet\", \"product_id\": \"7765186836\", \"item_id\": \"5537798301\", \"price\": 204.47, \"options\": {\"size\": \"S\", \"color\": \"black\", \"ventilation\": \"medium\"}}, {\"name\": \"Wireless Earbuds\", \"product_id\": \"9924732112\", \"item_id\": \"1646531091\", \"price\": 232.49, \"options\": {\"color\": \"blue\", \"battery life\": \"6 hours\", \"water resistance\": \"IPX4\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 759.82, \"payment_method_id\": \"paypal_2031016\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Both address corrections have been completed:\n\n- **#W0000015** — the order containing the **Desk Lamp** — now ships to:  \n  **742 Juniper Street, Suite 5, Madison, WI 53703, USA**\n\n- **#W7807323** has been changed back to:  \n  **816 Spruce Street, Suite 114, Indianapolis, IN 46227, USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 300,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W7807323",
+     "new": "#W0000015"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W1205816",
+     "to_id": "#W7807323"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "63acab54e9d1af9f1143ea56b5c1619f6ee057a37daba883a9c583ad6e3cc271"
+  }
+ ]
+}

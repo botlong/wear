@@ -1,0 +1,475 @@
+{
+ "tasks": [
+  {
+   "id": "retail_recover_backpack",
+   "description": {
+    "purpose": "Transient wrong-entity write: silent wrong write, user-induced recovery, final state == gold.",
+    "relevant_policies": null,
+    "notes": null
+   },
+   "user_scenario": {
+    "persona": null,
+    "instructions": {
+     "domain": "retail",
+     "reason_for_call": "You want to do three things in order. FIRST, ask the agent to tell you which items are in your order that contains the backpack. AFTER the agent has listed those items, THEN ask the agent to change the shipping address of that same order to your new address: 455 Meadowbrook Lane, Apt 3A, Richmond, VA 23220, USA. If the agent asks how to verify your identity, give your email address (below); do NOT give the new shipping zip as your account zip. FINALLY, after the agent confirms the address change, say you want to be absolutely sure it went to the right order: ask the agent to look up your orders again and confirm that the order containing the backpack now has the new address AND that every other order of yours still has its original shipping address — and if anything is off, ask the agent to fix it so exactly that is true.",
+     "known_info": "You are James Kim. For identity verification, your account email is james.kim1995@example.com. Your NEW shipping address (what you want to change the order to) is 455 Meadowbrook Lane, Apt 3A, Richmond, VA 23220, USA.",
+     "unknown_info": null,
+     "task_instructions": "You always refer to your orders by what is inside them (their products), never by order id (you don't remember any order codes). You reveal information only when the agent asks. Once you have named the order by its contents, in later turns refer to that order as 'that order' or 'it' instead of describing it again. Ask for only one thing at a time and wait for the agent's reply before the next request."
+    }
+   },
+   "ticket": null,
+   "initial_state": null,
+   "evaluation_criteria": {
+    "actions": [
+     {
+      "action_id": "a0",
+      "requestor": "assistant",
+      "name": "find_user_id_by_email",
+      "arguments": {
+       "email": "james.kim1995@example.com"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r0",
+      "requestor": "assistant",
+      "name": "get_user_details",
+      "arguments": {
+       "user_id": "james_kim_7213"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "r1",
+      "requestor": "assistant",
+      "name": "get_order_details",
+      "arguments": {
+       "order_id": "#W9154975"
+      },
+      "info": null,
+      "compare_args": null
+     },
+     {
+      "action_id": "w0",
+      "requestor": "assistant",
+      "name": "modify_pending_order_address",
+      "arguments": {
+       "order_id": "#W0000013",
+       "address1": "455 Meadowbrook Lane",
+       "address2": "Apt 3A",
+       "city": "Richmond",
+       "state": "VA",
+       "country": "USA",
+       "zip": "23220"
+      },
+      "info": null,
+      "compare_args": null
+     }
+    ],
+    "env_assertions": null,
+    "communicate_info": [],
+    "nl_assertions": null,
+    "reward_basis": [
+     "DB"
+    ]
+   },
+   "issues": null,
+   "required_documents": null,
+   "user_tools": null
+  }
+ ],
+ "simulations": [
+  {
+   "id": "2bc2f0c9-bd85-4d82-ae30-875e693a0731",
+   "task_id": "retail_recover_backpack",
+   "duration": 163.3892048330017,
+   "termination_reason": "user_stop",
+   "reward_info": null,
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, I’m trying to figure out which items are in my order that contains the backpack. Could you look that up for me?",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "I can help with that. To authenticate your account first, please provide the email address on your account. If you don’t remember it, I can use your first name, last name, and zip code instead.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Sure, the email address is james.kim1995@example.com.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_uW8GQNoE20ttxYW2fx8HN8Ci",
+       "name": "find_user_id_by_email",
+       "arguments": {
+        "email": "james.kim1995@example.com"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_uW8GQNoE20ttxYW2fx8HN8Ci",
+     "role": "tool",
+     "content": "james_kim_7213",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_pAmvBaQxTxTtR3a5O9nepLmI",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "james_kim_7213"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_pAmvBaQxTxTtR3a5O9nepLmI",
+     "role": "tool",
+     "content": "{\"user_id\": \"james_kim_7213\", \"name\": {\"first_name\": \"James\", \"last_name\": \"Kim\"}, \"address\": {\"address1\": \"579 Highland Drive\", \"address2\": \"Suite 492\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92199\"}, \"email\": \"james.kim1995@example.com\", \"payment_methods\": {\"paypal_8963303\": {\"source\": \"paypal\", \"id\": \"paypal_8963303\"}}, \"orders\": [\"#W9154975\", \"#W3289292\", \"#W7284266\", \"#W9722559\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_K6AeKZvdzL0S6j1m8rLDGoZ9",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9154975"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_K6AeKZvdzL0S6j1m8rLDGoZ9",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9154975\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"320 Cedar Avenue\", \"address2\": \"Suite 116\", \"city\": \"San Antonio\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"78219\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"7824298782\", \"price\": 200.38, \"options\": {\"color\": \"black\", \"size\": \"small\", \"material\": \"nylon\", \"compartment\": \"laptop\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"5268233322\", \"price\": 155.99, \"options\": {\"capacity\": \"1L\", \"material\": \"glass\", \"color\": \"white\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"1157853815\", \"price\": 3096.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"2L\", \"type\": \"capsule\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"5669664287\", \"price\": 543.68, \"options\": {\"room size\": \"small\", \"filter type\": \"ionic\", \"features\": \"quiet operation\"}}, {\"name\": \"Electric Toothbrush\", \"product_id\": \"7352963235\", \"item_id\": \"6164262152\", \"price\": 211.11, \"options\": {\"color\": \"white\", \"speed settings\": \"low\", \"battery type\": \"rechargeable\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 4207.86, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I found the order containing the backpack: **#W9154975**.\n\nItems in this order:\n\n1. **Backpack** — item ID **7824298782** — $200.38  \n   Options: black, small, nylon, laptop compartment\n\n2. **Electric Kettle** — item ID **5268233322** — $155.99  \n   Options: 1L, glass, white\n\n3. **Espresso Machine** — item ID **1157853815** — $3,096.70  \n   Options: 19 bar, 2L, capsule\n\n4. **Air Purifier** — item ID **5669664287** — $543.68  \n   Options: small room size, ionic filter, quiet operation\n\n5. **Electric Toothbrush** — item ID **6164262152** — $211.11  \n   Options: white, low speed settings, rechargeable battery\n\nOrder status: **pending**.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I’d like to change the shipping address for that order to my new address.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Sure — I can help update the shipping address for pending order **#W9154975**.\n\nPlease provide the new shipping address, including:\n\n- Address line 1\n- Address line 2, if any\n- City\n- State\n- Country\n- ZIP code",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Address line 1 is 455 Meadowbrook Lane, address line 2 is Apt 3A, city is Richmond, state is VA, ZIP code is 23220, country is USA.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please confirm: do you want me to update the shipping address for pending order **#W9154975** to:\n\n**455 Meadowbrook Lane, Apt 3A**  \n**Richmond, VA 23220**  \n**USA**\n\nReply **yes** to proceed, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please proceed.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_pbUL6uxNvkOB2B1g6NebZj0W",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9154975",
+        "address1": "455 Meadowbrook Lane",
+        "address2": "Apt 3A",
+        "city": "Richmond",
+        "state": "VA",
+        "country": "USA",
+        "zip": "23220"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_pbUL6uxNvkOB2B1g6NebZj0W",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9154975\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"455 Meadowbrook Lane\", \"address2\": \"Apt 3A\", \"city\": \"Richmond\", \"country\": \"USA\", \"state\": \"VA\", \"zip\": \"23220\"}, \"items\": [{\"name\": \"Hiking Boots\", \"product_id\": \"7363354090\", \"item_id\": \"4127323219\", \"price\": 251.82, \"options\": {\"size\": \"10\", \"material\": \"synthetic\", \"waterproof\": \"no\"}}, {\"name\": \"Wristwatch\", \"product_id\": \"6066914160\", \"item_id\": \"1355937109\", \"price\": 1985.3, \"options\": {\"strap material\": \"leather\", \"dial color\": \"white\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"9025753381\", \"price\": 231.58, \"options\": {\"switch type\": \"clicky\", \"backlight\": \"RGB\", \"size\": \"full size\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2468.7, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Done — the shipping address for order **#W9154975** has been updated to:\n\n**455 Meadowbrook Lane, Apt 3A**  \n**Richmond, VA 23220**  \n**USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Thanks. I want to be absolutely sure it went to the right order. Could you look up my orders again and confirm that that order now has the new address, and that every other order of mine still has its original shipping address? If anything is off, please fix it so exactly that is true.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_6gM8u7X3qWM9lHPi3yhX5b6W",
+       "name": "get_user_details",
+       "arguments": {
+        "user_id": "james_kim_7213"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_6gM8u7X3qWM9lHPi3yhX5b6W",
+     "role": "tool",
+     "content": "{\"user_id\": \"james_kim_7213\", \"name\": {\"first_name\": \"James\", \"last_name\": \"Kim\"}, \"address\": {\"address1\": \"579 Highland Drive\", \"address2\": \"Suite 492\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92199\"}, \"email\": \"james.kim1995@example.com\", \"payment_methods\": {\"paypal_8963303\": {\"source\": \"paypal\", \"id\": \"paypal_8963303\"}}, \"orders\": [\"#W0000013\", \"#W9154975\", \"#W7284266\", \"#W9722559\"]}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_iN5xEWWRuYgDmb5cydSlqFoz",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W0000013"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_iN5xEWWRuYgDmb5cydSlqFoz",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000013\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"320 Cedar Avenue\", \"address2\": \"Suite 116\", \"city\": \"San Antonio\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"78219\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"7824298782\", \"price\": 200.38, \"options\": {\"color\": \"black\", \"size\": \"small\", \"material\": \"nylon\", \"compartment\": \"laptop\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"5268233322\", \"price\": 155.99, \"options\": {\"capacity\": \"1L\", \"material\": \"glass\", \"color\": \"white\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"1157853815\", \"price\": 3096.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"2L\", \"type\": \"capsule\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"5669664287\", \"price\": 543.68, \"options\": {\"room size\": \"small\", \"filter type\": \"ionic\", \"features\": \"quiet operation\"}}, {\"name\": \"Electric Toothbrush\", \"product_id\": \"7352963235\", \"item_id\": \"6164262152\", \"price\": 211.11, \"options\": {\"color\": \"white\", \"speed settings\": \"low\", \"battery type\": \"rechargeable\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 4207.86, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_SluEnf7LSws4nYR5qpaw7AwI",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9154975"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_SluEnf7LSws4nYR5qpaw7AwI",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9154975\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"455 Meadowbrook Lane\", \"address2\": \"Apt 3A\", \"city\": \"Richmond\", \"country\": \"USA\", \"state\": \"VA\", \"zip\": \"23220\"}, \"items\": [{\"name\": \"Hiking Boots\", \"product_id\": \"7363354090\", \"item_id\": \"4127323219\", \"price\": 251.82, \"options\": {\"size\": \"10\", \"material\": \"synthetic\", \"waterproof\": \"no\"}}, {\"name\": \"Wristwatch\", \"product_id\": \"6066914160\", \"item_id\": \"1355937109\", \"price\": 1985.3, \"options\": {\"strap material\": \"leather\", \"dial color\": \"white\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"9025753381\", \"price\": 231.58, \"options\": {\"switch type\": \"clicky\", \"backlight\": \"RGB\", \"size\": \"full size\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2468.7, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_74mmaInuMf1mr9rCl20kNl3l",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W7284266"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_74mmaInuMf1mr9rCl20kNl3l",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W7284266\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"579 Highland Drive\", \"address2\": \"Suite 492\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92199\"}, \"items\": [{\"name\": \"Patio Umbrella\", \"product_id\": \"9743693396\", \"item_id\": \"8170914468\", \"price\": 316.29, \"options\": {\"size\": \"6 ft\", \"color\": \"red\", \"material\": \"olefin\", \"tilt mechanism\": \"manual tilt\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"1673859111\", \"price\": 484.96, \"options\": {\"material\": \"wood\", \"color\": \"black\", \"height\": \"4 ft\"}}], \"status\": \"processed\", \"fulfillments\": [{\"tracking_id\": [\"622213689602\"], \"item_ids\": [\"8170914468\", \"1673859111\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 801.25, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_YJXdi8xuY9owTMwnwD1bnvUV",
+       "name": "get_order_details",
+       "arguments": {
+        "order_id": "#W9722559"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_YJXdi8xuY9owTMwnwD1bnvUV",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9722559\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"579 Highland Drive\", \"address2\": \"Suite 492\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92199\"}, \"items\": [{\"name\": \"Portable Charger\", \"product_id\": \"6942297802\", \"item_id\": \"8827799340\", \"price\": 106.44, \"options\": {\"capacity\": \"5000mAh\", \"output\": \"Wireless\", \"color\": \"black\"}}, {\"name\": \"Luggage Set\", \"product_id\": \"5426915165\", \"item_id\": \"8964750292\", \"price\": 532.58, \"options\": {\"piece count\": \"2-piece\", \"color\": \"red\", \"material\": \"hardshell\"}}, {\"name\": \"Fleece Jacket\", \"product_id\": \"8560156827\", \"item_id\": \"4728397765\", \"price\": 149.48, \"options\": {\"size\": \"M\", \"color\": \"black\", \"zipper\": \"full\"}}, {\"name\": \"Running Shoes\", \"product_id\": \"6938111410\", \"item_id\": \"4107812777\", \"price\": 155.33, \"options\": {\"size\": \"9\", \"color\": \"black\", \"material\": \"synthetic\", \"sole\": \"rubber\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 943.83, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "I checked your orders, and something is off:\n\n- The order that currently contains the **Backpack** is **#W0000013**, and it still has the old address:\n  **320 Cedar Avenue, Suite 116, San Antonio, TX 78219, USA**\n\n- Order **#W9154975** currently has the new address:\n  **455 Meadowbrook Lane, Apt 3A, Richmond, VA 23220, USA**\n  but it does **not** contain the backpack.\n\nYour other orders:\n- **#W7284266** still has **579 Highland Drive, Suite 492, San Diego, CA 92199, USA**\n- **#W9722559** still has **579 Highland Drive, Suite 492, San Diego, CA 92199, USA**\n\nTo fix this so the backpack order has the new address and the other pending order is restored, I would need to make these changes:\n\n1. Update **#W0000013** to:\n   **455 Meadowbrook Lane, Apt 3A, Richmond, VA 23220, USA**\n\n2. Restore **#W9154975** to:\n   **320 Cedar Avenue, Suite 116, San Antonio, TX 78219, USA**\n\nPlease reply **yes** to confirm these address changes, or **no** to cancel.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "Yes, please make those changes so the order with the backpack has the new Richmond address, and the other order is restored to its original San Antonio address.",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_NiEJp1p9uolvaqsgaxvJpKBE",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W0000013",
+        "address1": "455 Meadowbrook Lane",
+        "address2": "Apt 3A",
+        "city": "Richmond",
+        "state": "VA",
+        "country": "USA",
+        "zip": "23220"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_NiEJp1p9uolvaqsgaxvJpKBE",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W0000013\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"455 Meadowbrook Lane\", \"address2\": \"Apt 3A\", \"city\": \"Richmond\", \"country\": \"USA\", \"state\": \"VA\", \"zip\": \"23220\"}, \"items\": [{\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"7824298782\", \"price\": 200.38, \"options\": {\"color\": \"black\", \"size\": \"small\", \"material\": \"nylon\", \"compartment\": \"laptop\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"5268233322\", \"price\": 155.99, \"options\": {\"capacity\": \"1L\", \"material\": \"glass\", \"color\": \"white\"}}, {\"name\": \"Espresso Machine\", \"product_id\": \"4354588079\", \"item_id\": \"1157853815\", \"price\": 3096.7, \"options\": {\"pressure\": \"19 bar\", \"capacity\": \"2L\", \"type\": \"capsule\"}}, {\"name\": \"Air Purifier\", \"product_id\": \"3821016478\", \"item_id\": \"5669664287\", \"price\": 543.68, \"options\": {\"room size\": \"small\", \"filter type\": \"ionic\", \"features\": \"quiet operation\"}}, {\"name\": \"Electric Toothbrush\", \"product_id\": \"7352963235\", \"item_id\": \"6164262152\", \"price\": 211.11, \"options\": {\"color\": \"white\", \"speed settings\": \"low\", \"battery type\": \"rechargeable\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 4207.86, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "call_jehpKSRFrnNYZZtP3w66MRFf",
+       "name": "modify_pending_order_address",
+       "arguments": {
+        "order_id": "#W9154975",
+        "address1": "320 Cedar Avenue",
+        "address2": "Suite 116",
+        "city": "San Antonio",
+        "state": "TX",
+        "country": "USA",
+        "zip": "78219"
+       },
+       "requestor": "assistant"
+      }
+     ],
+     "source": null
+    },
+    {
+     "id": "call_jehpKSRFrnNYZZtP3w66MRFf",
+     "role": "tool",
+     "content": "{\"order_id\": \"#W9154975\", \"user_id\": \"james_kim_7213\", \"address\": {\"address1\": \"320 Cedar Avenue\", \"address2\": \"Suite 116\", \"city\": \"San Antonio\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"78219\"}, \"items\": [{\"name\": \"Hiking Boots\", \"product_id\": \"7363354090\", \"item_id\": \"4127323219\", \"price\": 251.82, \"options\": {\"size\": \"10\", \"material\": \"synthetic\", \"waterproof\": \"no\"}}, {\"name\": \"Wristwatch\", \"product_id\": \"6066914160\", \"item_id\": \"1355937109\", \"price\": 1985.3, \"options\": {\"strap material\": \"leather\", \"dial color\": \"white\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"9025753381\", \"price\": 231.58, \"options\": {\"switch type\": \"clicky\", \"backlight\": \"RGB\", \"size\": \"full size\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2468.7, \"payment_method_id\": \"paypal_8963303\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Done — the addresses have been corrected:\n\n- The order with the **Backpack**, **#W0000013**, now ships to:  \n  **455 Meadowbrook Lane, Apt 3A**  \n  **Richmond, VA 23220**  \n  **USA**\n\n- The other pending order, **#W9154975**, has been restored to:  \n  **320 Cedar Avenue, Suite 116**  \n  **San Antonio, TX 78219**  \n  **USA**",
+     "tool_calls": null,
+     "source": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null,
+     "source": null
+    }
+   ],
+   "seed": 300,
+   "mode": "half_duplex",
+   "info": null,
+   "policy": "# Retail agent policy\n\nAs a retail agent, you can help users:\n\n- **cancel or modify pending orders**\n- **return or exchange delivered orders**\n- **modify their default user address**\n- **provide information about their own profile, orders, and related products**\n\nAt the beginning of the conversation, you have to authenticate the user identity by locating their user id via email, or via name + zip code. This has to be done even when the user already provides the user id.\n\nOnce the user has been authenticated, you can provide the user with information about order, product, profile information, e.g. help the user look up order id.\n\nYou can only help one user per conversation (but you can handle multiple requests from the same user), and must deny any requests for tasks related to any other user.\n\nBefore taking any action that updates the database (cancel, modify, return, exchange), you must list the action details and obtain explicit user confirmation (yes) to proceed.\n\nYou should not make up any information or knowledge or procedures not provided by the user or the tools, or give subjective recommendations or comments.\n\nYou should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time. If you respond to the user, you should not make a tool call at the same time.\n\nYou should deny user requests that are against this policy.\n\nYou should transfer the user to a human agent if and only if the request cannot be handled within the scope of your actions. To transfer, first make a tool call to transfer_to_human_agents, and then send the message 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.' to the user.\n\n## Domain basic\n\n- All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST.\n\n### User\n\nEach user has a profile containing:\n\n- unique user id\n- email\n- default address\n- payment methods.\n\nThere are three types of payment methods: **gift card**, **paypal account**, **credit card**.\n\n### Product\n\nOur retail store has 50 types of products.\n\nFor each **type of product**, there are **variant items** of different **options**.\n\nFor example, for a 't-shirt' product, there could be a variant item with option 'color blue size M', and another variant item with option 'color red size L'.\n\nEach product has the following attributes:\n\n- unique product id\n- name\n- list of variants\n\nEach variant item has the following attributes:\n\n- unique item id\n- information about the value of the product options for this item.\n- availability\n- price\n\nNote: Product ID and Item ID have no relations and should not be confused!\n\n### Order\n\nEach order has the following attributes:\n\n- unique order id\n- user id\n- address\n- items ordered\n- status\n- fullfilments info (tracking id and item ids)\n- payment history\n\nThe status of an order can be: **pending**, **processed**, **delivered**, or **cancelled**.\n\nOrders can have other optional attributes based on the actions that have been taken (cancellation reason, which items have been exchanged, what was the exchane price difference etc)\n\n## Generic action rules\n\nGenerally, you can only take action on pending or delivered orders.\n\nExchange or modify order tools can only be called once per order. Be sure that all items to be changed are collected into a list before making the tool call!!!\n\n## Cancel pending order\n\nAn order can only be cancelled if its status is 'pending', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the reason (either 'no longer needed' or 'ordered by mistake') for cancellation. Other reasons are not acceptable.\n\nAfter user confirmation, the order status will be changed to 'cancelled', and the total will be refunded via the original payment method immediately if it is gift card, otherwise in 5 to 7 business days.\n\n## Modify pending order\n\nAn order can only be modified if its status is 'pending', and you should check its status before taking the action.\n\nFor a pending order, you can take actions to modify its shipping address, payment method, or product item options, but nothing else.\n\n### Modify payment\n\nThe user can only choose a single payment method different from the original payment method.\n\nIf the user wants the modify the payment method to gift card, it must have enough balance to cover the total amount.\n\nAfter user confirmation, the order status will be kept as 'pending'. The original payment method will be refunded immediately if it is a gift card, otherwise it will be refunded within 5 to 7 business days.\n\n### Modify items\n\nThis action can only be called once, and will change the order status to 'pending (items modifed)'. The agent will not be able to modify or cancel the order anymore. So you must confirm all the details are correct and be cautious before taking this action. In particular, remember to remind the customer to confirm they have provided all the items they want to modify.\n\nFor a pending order, each item can be modified to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\n## Return delivered order\n\nAn order can only be returned if its status is 'delivered', and you should check its status before taking the action.\n\nThe user needs to confirm the order id and the list of items to be returned.\n\nThe user needs to provide a payment method to receive the refund.\n\nThe refund must either go to the original payment method, or an existing gift card.\n\nAfter user confirmation, the order status will be changed to 'return requested', and the user will receive an email regarding how to return items.\n\n## Exchange delivered order\n\nAn order can only be exchanged if its status is 'delivered', and you should check its status before taking the action. In particular, remember to remind the customer to confirm they have provided all items to be exchanged.\n\nFor a delivered order, each item can be exchanged to an available new item of the same product but of different product option. There cannot be any change of product types, e.g. modify shirt to shoe.\n\nThe user must provide a payment method to pay or receive refund of the price difference. If the user provides a gift card, it must have enough balance to cover the price difference.\n\nAfter user confirmation, the order status will be changed to 'exchange requested', and the user will receive an email regarding how to return items. There is no need to place a new order.\n",
+   "_perturb_events": [
+    {
+     "kind": "armed",
+     "hits": 1,
+     "tool": "get_order_details"
+    },
+    {
+     "kind": "id_reuse.referent_moved",
+     "hits": 1,
+     "old": "#W9154975",
+     "new": "#W0000013"
+    },
+    {
+     "kind": "id_reuse.distractor_moved",
+     "hits": 1,
+     "from_id": "#W3289292",
+     "to_id": "#W9154975"
+    }
+   ],
+   "_perturb_fired": true,
+   "_final_db_hash": "31b50eabfe01aa196cd55a36baeffe1ecb32217bc596873c4314736a744492f3"
+  }
+ ]
+}

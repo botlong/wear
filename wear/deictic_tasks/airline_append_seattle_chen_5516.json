@@ -1,0 +1,118 @@
+[
+ {
+  "id": "airline_append_seattle_chen_5516",
+  "_doc": "APPEND×identity (anchored;): referent SNB279 (trip to Seattle), decoy ZZ9107 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9107' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: anchored resolution. Gold unchanged (SNB279).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9107"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to tell you the flight details (flight numbers and dates) of your trip to Seattle. SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to that same trip.",
+    "known_info": "You are Chen Gonzalez, user id chen_gonzalez_5516, date of birth 1961-08-10. Your one and only trip to Seattle departs from Miami on 2024-05-18.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9107": {
+       "reservation_id": "ZZ9107",
+       "user_id": "chen_gonzalez_5516",
+       "origin": "MIA",
+       "destination": "SEA",
+       "flight_type": "one_way",
+       "cabin": "business",
+       "flights": [
+        {
+         "origin": "MIA",
+         "destination": "JFK",
+         "flight_number": "HAT198",
+         "date": "2024-05-21",
+         "price": 1658
+        },
+        {
+         "origin": "JFK",
+         "destination": "SEA",
+         "flight_number": "HAT069",
+         "date": "2024-05-21",
+         "price": 993
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Chen",
+         "last_name": "Gonzalez",
+         "dob": "1961-08-10"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "credit_card_2870431",
+         "amount": 2651
+        }
+       ],
+       "created_at": "2024-05-05T00:25:23",
+       "total_baggages": 0,
+       "nonfree_baggages": 0,
+       "insurance": "no"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "chen_gonzalez_5516"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "SNB279"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "SNB279",
+      "total_baggages": 1,
+      "nonfree_baggages": 0,
+      "payment_id": "credit_card_2191342"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

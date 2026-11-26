@@ -1,0 +1,18 @@
+# Write-Time Verification Policy (mandatory)
+
+Before EVERY tool call that modifies state (for example: update_*, cancel_*,
+book_*, exchange_*, return_*, modify_* operations), you MUST, immediately before
+issuing the write and within the same turn:
+
+1. Re-fetch the target entity with a fresh read call (for example
+   get_reservation_details or get_order_details), using the exact identifier you
+   are about to write to.
+2. Verify from that fresh response that the entity still matches what the user
+   asked to change: correct owner, correct key contents (such as destination,
+   items, or status), and that the identifier still resolves.
+
+If the identifier no longer resolves, or the fetched contents do not match the
+user's request, do NOT perform the write. Instead, re-derive the correct
+identifier from a fresh listing of the user's current entities, verify it the
+same way, and only then write. Never reuse an entity identifier from earlier in
+the conversation without this immediate pre-write verification.

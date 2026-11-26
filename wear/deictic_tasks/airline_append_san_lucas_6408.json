@@ -1,0 +1,118 @@
+[
+ {
+  "id": "airline_append_san_lucas_6408",
+  "_doc": "APPEND×identity (fresh;): referent LJM636 (trip to San Francisco), decoy ZZ9100 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9100' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: fresh resolution. Gold unchanged (LJM636).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9100"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to list all the trips on your account (destination cities and dates). SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to your trip to San Francisco.",
+    "known_info": "You are Lucas Nguyen, user id lucas_nguyen_6408, date of birth 1962-12-13. Your one and only trip to San Francisco departs from Las Vegas on 2024-05-19.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9100": {
+       "reservation_id": "ZZ9100",
+       "user_id": "lucas_nguyen_6408",
+       "origin": "LAS",
+       "destination": "SFO",
+       "flight_type": "one_way",
+       "cabin": "economy",
+       "flights": [
+        {
+         "origin": "LAS",
+         "destination": "PHX",
+         "flight_number": "HAT242",
+         "date": "2024-05-22",
+         "price": 140
+        },
+        {
+         "origin": "PHX",
+         "destination": "SFO",
+         "flight_number": "HAT159",
+         "date": "2024-05-22",
+         "price": 163
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Lucas",
+         "last_name": "Nguyen",
+         "dob": "1962-12-13"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "gift_card_2684964",
+         "amount": 333
+        }
+       ],
+       "created_at": "2024-05-09T09:22:56",
+       "total_baggages": 0,
+       "nonfree_baggages": 0,
+       "insurance": "yes"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "lucas_nguyen_6408"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "LJM636"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "LJM636",
+      "total_baggages": 1,
+      "nonfree_baggages": 0,
+      "payment_id": "gift_card_2684964"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]

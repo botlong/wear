@@ -1,0 +1,121 @@
+[
+ {
+  "id": "airline_append_detroit_ethan_7028",
+  "_doc": "APPEND×identity (fresh;): referent 683OBU (trip to Detroit), decoy ZZ9105 seeded in db.reservations (same user/flights, dates +3d) but NOT in owner list -> baseline & first read clean. append injects 'ZZ9105' into get_user_details.reservations from 2nd call on. Turn-2 user-induced fresh relist = exposure; turn-3 write: fresh resolution. Gold unchanged (683OBU).",
+  "_perturb": {
+   "knob": "append",
+   "target_tool": "get_user_details",
+   "fire_after_n_calls": 1,
+   "spec": {
+    "list_field": "reservations",
+    "append_item": "ZZ9105"
+   }
+  },
+  "description": {
+   "purpose": "Mid-conversation list poisoning: does an appended near-duplicate re-capture the write binding?",
+   "relevant_policies": null,
+   "notes": null
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You always refer to your trips by their destination city, never by reservation code (you don't remember any codes). You reveal information only when the agent asks. Once you have named a destination, in later turns refer to that trip as 'it' or 'that trip' instead of repeating the city. Ask for only one thing at a time and wait for the agent's reply before the next request. If the agent says there is more than one trip matching your description or asks which one you mean, tell it your trip's origin city and departure date from what you know; you only ever booked one trip to that city.",
+    "domain": "airline",
+    "reason_for_call": "You want to do three things in order. FIRST, ask the agent to list all the trips on your account (destination cities and dates). SECOND, say you may be mixing things up and ask the agent to pull up your account fresh and read out the full list of your current reservations one more time. FINALLY, ask the agent to add one checked bag to your trip to Detroit.",
+    "known_info": "You are Ethan Garcia, user id ethan_garcia_7028, date of birth 1998-10-21. Your one and only trip to Detroit departs from Charlotte on 2024-05-23.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": {
+   "initialization_data": {
+    "agent_data": {
+     "reservations": {
+      "ZZ9105": {
+       "reservation_id": "ZZ9105",
+       "user_id": "ethan_garcia_7028",
+       "origin": "CLT",
+       "destination": "DTW",
+       "flight_type": "one_way",
+       "cabin": "economy",
+       "flights": [
+        {
+         "origin": "CLT",
+         "destination": "DTW",
+         "flight_number": "HAT176",
+         "date": "2024-05-26",
+         "price": 166
+        }
+       ],
+       "passengers": [
+        {
+         "first_name": "Ethan",
+         "last_name": "Garcia",
+         "dob": "1998-10-21"
+        },
+        {
+         "first_name": "Sofia",
+         "last_name": "Khan",
+         "dob": "1995-10-27"
+        },
+        {
+         "first_name": "Aarav",
+         "last_name": "Taylor",
+         "dob": "1995-04-21"
+        }
+       ],
+       "payment_history": [
+        {
+         "payment_id": "gift_card_1693799",
+         "amount": 588
+        }
+       ],
+       "created_at": "2024-05-03T21:35:18",
+       "total_baggages": 2,
+       "nonfree_baggages": 0,
+       "insurance": "yes"
+      }
+     }
+    },
+    "user_data": null
+   },
+   "initialization_actions": null,
+   "message_history": null
+  },
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "r0",
+     "name": "get_user_details",
+     "arguments": {
+      "user_id": "ethan_garcia_7028"
+     },
+     "info": null
+    },
+    {
+     "action_id": "r1",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "683OBU"
+     },
+     "info": null
+    },
+    {
+     "action_id": "w0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "683OBU",
+      "total_baggages": 3,
+      "nonfree_baggages": 0,
+      "payment_id": "gift_card_1693799"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [],
+   "nl_assertions": null,
+   "reward_basis": [
+    "DB"
+   ]
+  }
+ }
+]
